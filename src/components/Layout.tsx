@@ -1,10 +1,17 @@
+import { Outlet } from "react-router-dom";
+
 interface LayoutProps {
-  children: React.ReactNode;
+  containerStyle?: React.CSSProperties;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  return <div className="container">{children}</div>;
+const Layout: React.FC<LayoutProps> = ({ containerStyle }) => {
+  return (
+    <div style={containerStyle}>
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  );
 };
 
 export default Layout;
-1;
