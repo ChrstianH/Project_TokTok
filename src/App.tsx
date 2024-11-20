@@ -19,12 +19,6 @@ import Layout from "./components/Layout";
 
 const client = new QueryClient();
 
-const containerStyle: React.CSSProperties = {
-  width: "60%",
-  margin: "0 auto",
-  height: "100vh",
-};
-
 export default function App() {
   // useEffect(() => {
 
@@ -38,7 +32,7 @@ export default function App() {
     <QueryClientProvider client={client}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout containerStyle={containerStyle} />}>
+          <Route path="/" element={<Layout />}>
             <Route index element={<LoginPage />} />
             {/* <Route path="/" element={<LoadingScreen />} /> */}
             {/* <Route path="/login" element={<LoginPage/>}/> */}
@@ -46,7 +40,7 @@ export default function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/:userID/profile" element={<ProfilePage />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/:userID/add-post" element={<NewPostPage />} />
+              <Route path="/:userID/new-post" element={<NewPostPage />} />
             </Route>
             <Route path="/:userID/edit-profile" element={<EditProfilePage />} />
             <Route path="/search" element={<SearchPage />} />

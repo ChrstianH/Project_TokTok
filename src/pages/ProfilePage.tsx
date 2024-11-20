@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import logo from "../../public/Logo.svg";
 import addIcon from "../../public/icons/plus_icon.svg";
@@ -22,7 +23,7 @@ interface Profile {
 }
 
 export default function ProfilePage() {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
 
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
@@ -49,6 +50,19 @@ export default function ProfilePage() {
 
   console.log(user);
 
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setProfile(undefined);
+      navigate("/login");
+      setUser(null);
+    } catch (error) {
+      console.error("Fehler beim Logout:", error);
+    }
+  };
+
   return (
     <div>
       <div className="profile-header">
@@ -57,9 +71,15 @@ export default function ProfilePage() {
           <h2>{profile?.user_name}</h2>
         </div>
         <div className="profile-icons">
-          <img src={addIcon} alt="add_post" />
-          <img src={editIcon} alt="edit_profile" />
-          <img src={moreIcon} alt="settings" />
+          <NavLink to={`/${user?.id}/new-post`}>
+            <img src={addIcon} alt="add_post" />
+          </NavLink>
+          <NavLink to={`/${user?.id}/edit-profile`}>
+            <img src={editIcon} alt="edit_profile" />
+          </NavLink>
+          <button onClick={handleLogout} className="logoutBtn">
+            <img src={moreIcon} alt="settings" />
+          </button>
         </div>
       </div>
       <div className="profile-container">
@@ -68,7 +88,9 @@ export default function ProfilePage() {
           <h2>{profile?.name}</h2>
           <h4>{profile?.occupation}</h4>
           <p>{profile?.slogan}</p>
-          {/* <a href={profile?.website}>{profile?.website}</a> */}
+          <a href={profile?.website || "www.yourdomain.com"}>
+            {profile?.website}
+          </a>
         </div>
         <div className="follower-container">
           <p>Posts</p>

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import arrowLeft from "../../public/icons/arrow_left.svg";
 import { useUserContext } from "../context/userContext";
 import { supabase } from "../lib/supabase";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function EditProfilePage() {
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +54,9 @@ export default function EditProfilePage() {
     <div>
       <div className="profile-header">
         <div>
-          <img src={arrowLeft} alt="arrow-left" />
+          <NavLink to={"/home"}>
+            <img src={arrowLeft} alt="back home button" />
+          </NavLink>
           <h2>Edit Profile</h2>
         </div>
       </div>
