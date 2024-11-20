@@ -22,7 +22,7 @@ export default function RegisterPage() {
       setUser(result.data.user);
       console.log(result);
       alert("You have successfully registered to the system.");
-      navigate("/", {
+      navigate("/:userID/edit-profile", {
         state: {
           message: "You have successfully registered to the system.",
         },

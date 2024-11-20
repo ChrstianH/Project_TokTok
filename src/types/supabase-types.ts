@@ -150,14 +150,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "posts_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "posts_user_id_fkey2"
+            foreignKeyName: "posts_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -167,45 +160,42 @@ export type Database = {
       }
       profiles: {
         Row: {
-          birthday: string
+          birthday: string | null
           created_at: string
-          email: string
-          gender: string
+          gender: string | null
           id: string
           img_url: string | null
-          name: string
+          name: string | null
           occupation: string | null
           phone: string | null
           slogan: string | null
-          user_name: string
+          user_name: string | null
           website: string | null
         }
         Insert: {
-          birthday: string
+          birthday?: string | null
           created_at?: string
-          email: string
-          gender: string
+          gender?: string | null
           id?: string
           img_url?: string | null
-          name: string
+          name?: string | null
           occupation?: string | null
           phone?: string | null
           slogan?: string | null
-          user_name: string
+          user_name?: string | null
           website?: string | null
         }
         Update: {
-          birthday?: string
+          birthday?: string | null
           created_at?: string
-          email?: string
-          gender?: string
+          gender?: string | null
           id?: string
           img_url?: string | null
-          name?: string
+          name?: string | null
           occupation?: string | null
           phone?: string | null
           slogan?: string | null
-          user_name?: string
+          user_name?: string | null
           website?: string | null
         }
         Relationships: []
