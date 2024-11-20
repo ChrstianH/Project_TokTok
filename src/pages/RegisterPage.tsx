@@ -22,7 +22,7 @@ export default function RegisterPage() {
       setUser(result.data.user);
       console.log(result);
       alert("You have successfully registered to the system.");
-      navigate("/:userID/edit-profile", {
+      navigate(`/${result.data.user?.id}/edit-profile`, {
         state: {
           message: "You have successfully registered to the system.",
         },
@@ -32,8 +32,8 @@ export default function RegisterPage() {
   return (
     <div>
       <div>
-        <img src={logo} alt="" />
         <h1>Create your Account</h1>
+        <img src={logo} alt="" />
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -49,10 +49,10 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button>Sign Up</button>
+          <button>Sign up</button>
         </form>
         <p>
-          Already have an account? <Link to="/signup"></Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>

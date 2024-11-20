@@ -1,17 +1,11 @@
 import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  containerStyle?: React.CSSProperties;
-}
-
-const Layout: React.FC<LayoutProps> = ({ containerStyle }) => {
+export default function Layout() {
   return (
-    <div style={containerStyle}>
+    <div className="mobile-container">
       <main>
         <Outlet />
       </main>
     </div>
   );
-};
-
-export default Layout;
+}

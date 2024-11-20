@@ -21,15 +21,15 @@ export default function LoginPage() {
     } else {
       setUser(result.data.user);
       console.log(result);
-      navigate("/");
+      navigate("/home");
     }
   };
 
   return (
     <div>
       <div>
-        <img src={logo} alt="" />
         <h1>Login to your Account</h1>
+        <img src={logo} alt="toktok-logo" />
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -46,13 +46,10 @@ export default function LoginPage() {
             required
           />
           <button>Sign In</button>
-          <button onClick={() => console.log("Forgot password")}>
-            {" "}
-            Forgot the password?
-          </button>
+          <a href="#">Forgot the password?</a>
         </form>
         <p>
-          Don’t have an account? <Link to="/signup"></Link>
+          Don’t have an account? <Link to="/signup">Sign up</Link>
         </p>
       </div>
     </div>

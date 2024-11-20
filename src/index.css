@@ -13,9 +13,16 @@ html {
   background-color: lightgray;
   font-family: Urbanist;
 }
+
+.mobile-container {
+  width: 428px;
+  height: 882px;
+  margin: 0 auto;
+}
 main {
   background-color: white;
-  height: 100vh;
+  height: 100%;
+  margin-top: 2%;
 }
 
 /* LoadingScreen */
@@ -47,16 +54,29 @@ main {
 
 .profile-header div:first-of-type img {
   padding-right: 15px;
+  height: 32px;
+  width: 32px;
 }
 
 .profile-header div:first-of-type h2 {
   font-size: 1em;
 }
 
-.prodile-icons {
-  width: 50%;
+.profile-icons {
+  width: 150px;
   display: flex;
   justify-content: space-between;
+  padding-right: 1.2rem;
+}
+
+.profile-icons a img {
+  width: 25px;
+  height: 25px;
+}
+
+.logoutBtn img {
+  width: 28px;
+  height: 28px;
 }
 
 .profile-container {
@@ -72,3 +92,10 @@ main {
 }
 
 /* EditProfilePage  */
+
+.back-home-btn,
+.logoutBtn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
