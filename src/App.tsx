@@ -8,7 +8,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NewPostPage from "./pages/NewPostPage";
 import SearchPage from "./pages/SearchPage";
 import EditProfilePage from "./pages/EditProfilePage";
-import HomePage from "./pages/HomePage";
 
 const client = new QueryClient();
 
@@ -26,10 +25,9 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
           {/* <Route path="/" element={<LoadingScreen />} /> */}
           {/* <Route path="/login" element={<LoginPage/>}/> */}
-          {/* <Route path="/signup" element={<RegisterPage />} /> */}
+          <Route path="/signup" element={<RegisterPage />} />
           <Route path="/:userID/profile" element={<ProfilePage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/:userID/add-post" element={<NewPostPage />} />
