@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
 
+import logo from "../../public/Logo.svg";
+import addIcon from "../../public/icons/plus_icon.svg";
+import editIcon from "../../public/icons/edit_icon.svg";
+import moreIcon from "../../public/icons/more_icon.svg";
+
 interface Profile {
   id: string;
   img_url: string | null;
@@ -47,19 +52,19 @@ export default function ProfilePage() {
     <div>
       <div className="profile-header">
         <div>
-          <img src="" alt="toktok_logo" />
+          <img src={logo} alt="toktok_logo" />
           <h2>{profile?.user_name}</h2>
         </div>
-        <div>
-          <img src="" alt="add_post" />
-          <img src="" alt="edit_profile" />
-          <img src="" alt="settings" />
+        <div className="profile-icons">
+          <img src={addIcon} alt="add_post" />
+          <img src={editIcon} alt="edit_profile" />
+          <img src={moreIcon} alt="settings" />
         </div>
       </div>
       <div className="profile-container">
         <div>
           {/* <img src={profile?.img_url} alt={profile?.user_name} /> */}
-          <h2>{profile?.user_name}</h2>
+          <h2>{profile?.name}</h2>
           <h4>{profile?.occupation}</h4>
           <p>{profile?.slogan}</p>
           {/* <a href={profile?.website}>{profile?.website}</a> */}
