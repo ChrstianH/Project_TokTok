@@ -1,41 +1,73 @@
-import { useContext, useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { useQuery } from "@tanstack/react-query";
+import { useUserContext } from "../context/userContext";
 
-type User = {
-  name: string;
-  occupation: string | null;
-  phone: string | null;
-  slogan: string | null;
-  user_name: string;
-  website: string | null;
-};
+interface Post {
+  created_at: string;
+  id: string;
+  img_url: string | null;
+  text: string;
+  user_id: string;
+}
 
 export default function HomePage() {
-  const { user, setUser } = useState<User | null>({});
-  useEffect(() => {
-    getUserData().then((userResult) => setUser(userResult.data));
-  }, []);
+  const { user } = useUserContext();
 
-  const { id } = useContext();
+  if (!user) {
+  }
 
-  const getUserData = async () => {
-    const result = await supabase.from("profiles").select("*").eq("id", id);
-    return result;
-  };
+  const postQuery = useQuery({
+    queryKey: [],
+    queryFn: async () => {
+      const result = await supabase.from("posts").select("*");
+      //        .eq("user_id", user?.id!);
+      if (result.error) {
+        throw result.error;
+      }
+      return result.data;
+    },
+  });
+
+  const profileQuery = useQuery({
+    queryKey: [],
+    queryFn: async () => {
+      const result = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user?.id!)
+        .single();
+      if (result.error) {
+        throw result.error;
+      }
+      return result.data;
+    },
+  });
+
+  const posts = postQuery.data;
+  const profile = profileQuery.data;
 
   return (
     <div>
-      <div>
-        <img src="" alt="" className="avatar" />
-        <b>{user.name}</b>
-        <p>{user.occupation}</p>
-      </div>
-      <div>
-        <button></button>
-      </div>
-      <img src="" alt="" />
-      Likes {user.isLiked}
-      Comments {user.comments.length}
+      {posts &&
+        posts.map((post: Post) => (
+          <div>
+            <div>
+              <img
+                src={profile?.img_url!}
+                alt={profile?.name}
+                className="avatar"
+              />
+              <b>{profile?.user_name}</b>
+              <p>{profile?.occupation}</p>
+            </div>
+            <div>
+              <button></button>
+            </div>
+            <img src={post.img_url!} alt={post.text} />
+            <p>Likes: viele</p>
+            <p>Comments: nicht ganz so viele</p>
+          </div>
+        ))}
     </div>
   );
 }
