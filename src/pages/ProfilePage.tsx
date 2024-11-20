@@ -27,7 +27,7 @@ export default function ProfilePage() {
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("id", user.id)
           .single();
 
         if (error) {
@@ -40,6 +40,8 @@ export default function ProfilePage() {
 
     fetchProfile();
   }, [user]);
+
+  console.log(user);
 
   return (
     <div>
