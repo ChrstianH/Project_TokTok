@@ -47,11 +47,8 @@ export default function App() {
             <Route path="/:userID/profile" element={<ProfilePage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/:userID/add-post" element={<NewPostPage />} />
-              <Route
-                path="/:userID/edit-profile"
-                element={<EditProfilePage />}
-              />
             </Route>
+            <Route path="/:userID/edit-profile" element={<EditProfilePage />} />
             <Route path="/search" element={<SearchPage />} />
 
             <Route path="*" element={<Navigate to="/" />} />

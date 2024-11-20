@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
 
 import logo from "../../public/Logo.svg";
@@ -10,21 +10,22 @@ import moreIcon from "../../public/icons/more_icon.svg";
 interface Profile {
   id: string;
   img_url: string | null;
-  name: string;
-  user_name: string;
-  birthday: string;
+  name: string | null;
+  user_name: string | null;
+  birthday: string | null;
   occupation: string | null;
   slogan: string | null;
   created_at: string;
-  email: string;
   phone: string | null;
-  gender: string;
+  gender: string | null;
   website: string | null;
 }
 
 export default function ProfilePage() {
   const { user } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
+
+  const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -63,7 +64,7 @@ export default function ProfilePage() {
       </div>
       <div className="profile-container">
         <div>
-          {/* <img src={profile?.img_url} alt={profile?.user_name} /> */}
+          <img src={imageUrl || "https://placehold.co/600x900"} alt="" />
           <h2>{profile?.name}</h2>
           <h4>{profile?.occupation}</h4>
           <p>{profile?.slogan}</p>

@@ -37,6 +37,7 @@ main {
 
 .profile-header img {
   height: 30px;
+  width: 30px;
 }
 
 .profile-header div:first-of-type {
@@ -45,7 +46,7 @@ main {
 }
 
 .profile-header div:first-of-type img {
-  padding-right: 5px;
+  padding-right: 15px;
 }
 
 .profile-header div:first-of-type h2 {
