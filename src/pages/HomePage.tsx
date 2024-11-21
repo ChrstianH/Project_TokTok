@@ -2,69 +2,79 @@ import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { useUserContext } from "../context/userContext";
 
-interface Post {
-  created_at: string;
+interface PostWithProfile {
   id: string;
   img_url: string | null;
   text: string;
   user_id: string;
+  created_at: string;
+  profiles: {
+    user_name: string;
+    img_url: string | null;
+  };
 }
 
 export default function HomePage() {
+  //den userContext brauchen wir dann später wieder wenn wir followen und kommentieren wollen
   const { user } = useUserContext();
 
-  if (!user) {
+  const postsWithProfilesQuery = useQuery({
+    queryKey: ["postsWithProfiles"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("posts").select(`
+          id, 
+          img_url, 
+          text, 
+          user_id, 
+          created_at,
+          profiles (
+            user_name, 
+            img_url
+          )
+        `);
+      if (error) {
+        throw error;
+      }
+      return data;
+    },
+  });
+
+  if (postsWithProfilesQuery.isLoading) {
+    return <div>Loading...</div>;
   }
 
-  const postQuery = useQuery({
-    queryKey: [],
-    queryFn: async () => {
-      const result = await supabase.from("posts").select("*");
-      //        .eq("user_id", user?.id!);
-      if (result.error) {
-        throw result.error;
-      }
-      return result.data;
-    },
-  });
+  if (postsWithProfilesQuery.isError) {
+    return (
+      <div>Error loading posts: {postsWithProfilesQuery.error.message}</div>
+    );
+  }
 
-  const profileQuery = useQuery({
-    queryKey: [],
-    queryFn: async () => {
-      const result = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user?.id!)
-        .single();
-      if (result.error) {
-        throw result.error;
-      }
-      return result.data;
-    },
-  });
-
-  const posts = postQuery.data;
-  const profile = profileQuery.data;
-  const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : "";
+  const postsWithProfiles = postsWithProfilesQuery.data as PostWithProfile[];
 
   return (
-    <div>
-      {posts &&
-        posts.map((post: Post) => (
+    <div className="main-container">
+      {postsWithProfiles.map((post: PostWithProfile) => (
+        <div key={post.id}>
           <div>
-            <div>
-              <img src={imageUrl!} alt={profile?.name!} className="avatar" />
-              <b>{profile?.user_name}</b>
-              <p>{profile?.occupation}</p>
-            </div>
-            <div>
-              <button></button>
-            </div>
-            <img src={getStorageURL(post.img_url!) || ""} alt={post.text} />
-            <p>Likes: viele</p>
-            <p>Comments: nicht ganz so viele</p>
+            <img
+              src={getStorageURL(post.profiles.img_url!) || ""}
+              alt={post.profiles.user_name}
+              className="avatar"
+            />
+            <b>{post.profiles.user_name}</b>
+            <button>♡</button>
           </div>
-        ))}
+
+          <img
+            src={getStorageURL(post.img_url!) || ""}
+            // alt={post.text}
+            className="homepage-img"
+          />
+          <p>{post.text}</p>
+          <p>Likes: viele</p>
+          <p>Comments: nicht ganz so viele</p>
+        </div>
+      ))}
     </div>
   );
 }
