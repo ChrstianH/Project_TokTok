@@ -137,116 +137,118 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="search-page" style={{ padding: "20px" }}>
-      {/* <div>
+    <div className="main-container">
+      <div className="search-page" style={{ padding: "20px" }}>
+        {/* <div>
         <h1>Current User ID: {currentUserId || "Not logged in"}</h1>
       </div> */}
-      <div
-        className="search-bar"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "20px",
-        }}
-      >
         <div
-          className="search-input-container"
-          style={{ position: "relative", width: "90%" }}
+          className="search-bar"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}
         >
-          <img
-            src={searchIcon}
-            alt="Search Icon"
-            className="search-icon"
-            style={{
-              position: "absolute",
-              left: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-          />
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "20px 20px 20px 40px",
-              border: "1px solid #ccc",
-              borderRadius: "20px",
-              fontSize: "16px",
-              outline: "none",
-            }}
-          />
-        </div>
-      </div>
-      <div
-        className="user-list"
-        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-      >
-        {users.map((user) => (
           <div
-            key={user.id}
-            className="user-card"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              backgroundColor: "#f9f9f9",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-            }}
+            className="search-input-container"
+            style={{ position: "relative", width: "90%" }}
           >
-            <div
-              className="user-info"
-              style={{ display: "flex", alignItems: "center", gap: "10px" }}
-            >
-              <img
-                src={user.imageUrl || "https://via.placeholder.com/50"}
-                alt={user.user_name || "user avatar"}
-                className="search-avatar"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "https://via.placeholder.com/50";
-                }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-              />
-
-              <div className="user-details">
-                <div style={{ fontSize: "18px" }}>{user.user_name}</div>
-                <div style={{ fontSize: "14px" }}>{user.occupation}</div>
-              </div>
-            </div>
-            {user.id !== currentUserId && (
-              <button
-                onClick={() =>
-                  user.isFollowing
-                    ? handleUnfollow(user.id)
-                    : handleFollow(user.id)
-                }
-                style={{
-                  padding: "8px 20px",
-                  borderRadius: "20px",
-                  fontSize: "14px",
-                  backgroundColor: user.isFollowing ? "#ccc" : "#FF4D67",
-                  color: user.isFollowing ? "#000" : "#fff",
-                  transition: "all 0.3s",
-                  border: "none",
-                }}
-              >
-                {user.isFollowing ? "Following" : "Follow"}
-              </button>
-            )}
+            <img
+              src={searchIcon}
+              alt="Search Icon"
+              className="search-icon"
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            />
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Search"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "20px 20px 20px 40px",
+                border: "1px solid #ccc",
+                borderRadius: "20px",
+                fontSize: "16px",
+                outline: "none",
+              }}
+            />
           </div>
-        ))}
+        </div>
+        <div
+          className="user-list"
+          style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+        >
+          {users.map((user) => (
+            <div
+              key={user.id}
+              className="user-card"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                backgroundColor: "#f9f9f9",
+                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <div
+                className="user-info"
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <img
+                  src={user.imageUrl || "https://via.placeholder.com/50"}
+                  alt={user.user_name || "user avatar"}
+                  className="search-avatar"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://via.placeholder.com/50";
+                  }}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+
+                <div className="user-details">
+                  <div style={{ fontSize: "18px" }}>{user.user_name}</div>
+                  <div style={{ fontSize: "14px" }}>{user.occupation}</div>
+                </div>
+              </div>
+              {user.id !== currentUserId && (
+                <button
+                  onClick={() =>
+                    user.isFollowing
+                      ? handleUnfollow(user.id)
+                      : handleFollow(user.id)
+                  }
+                  style={{
+                    padding: "8px 20px",
+                    borderRadius: "20px",
+                    fontSize: "14px",
+                    backgroundColor: user.isFollowing ? "#ccc" : "#FF4D67",
+                    color: user.isFollowing ? "#000" : "#fff",
+                    transition: "all 0.3s",
+                    border: "none",
+                  }}
+                >
+                  {user.isFollowing ? "Following" : "Follow"}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

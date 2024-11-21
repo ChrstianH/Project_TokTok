@@ -1,6 +1,11 @@
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { useUserContext } from "../context/userContext";
+import { NavLink } from "react-router-dom";
+
+import HashtagText from "../components/HashtagText";
+
+import logo from "/Logo.svg";
 
 interface PostWithProfile {
   id: string;
@@ -11,6 +16,7 @@ interface PostWithProfile {
   profiles: {
     user_name: string;
     img_url: string | null;
+    occupation: string | null;
   };
 }
 
@@ -29,7 +35,8 @@ export default function HomePage() {
           created_at,
           profiles (
             user_name, 
-            img_url
+            img_url,
+            occupation
           )
         `);
       if (error) {
@@ -53,26 +60,40 @@ export default function HomePage() {
 
   return (
     <div className="main-container">
+      <div className="home-header">
+        <div>
+          <NavLink to={"/home"}>
+            <img src={logo} alt="toktok_logo" />
+          </NavLink>
+        </div>
+        <h1>TokTok</h1>
+      </div>
       {postsWithProfiles.map((post: PostWithProfile) => (
         <div key={post.id}>
-          <div>
+          <div className="post-header     ">
             <img
               src={getStorageURL(post.profiles.img_url!) || ""}
               alt={post.profiles.user_name}
               className="avatar"
             />
-            <b>{post.profiles.user_name}</b>
-            <button>♡</button>
+            <div>
+              <b>{post.profiles.user_name}</b>
+              <p>{post.profiles.occupation}</p>
+            </div>
           </div>
-
-          <img
-            src={getStorageURL(post.img_url!) || ""}
-            // alt={post.text}
-            className="homepage-img"
-          />
-          <p>{post.text}</p>
-          <p>Likes: viele</p>
-          <p>Comments: nicht ganz so viele</p>
+          <div className="post-container">
+            <img
+              src={getStorageURL(post.img_url!) || ""}
+              // alt={post.text}
+              className="post-img"
+            />
+            <HashtagText text={post.text} />
+            {/* <p className="post-text">{post.text}</p> */}
+            <div className="interaction-container">
+              <p>Likes: viele</p>
+              <p>Comments: nicht ganz so viele</p>
+            </div>
+          </div>
         </div>
       ))}
     </div>

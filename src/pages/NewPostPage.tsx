@@ -2,6 +2,9 @@ import { useRef } from "react";
 import { useUserContext } from "../context/userContext";
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
+import { NavLink } from "react-router-dom";
+
+import arrowLeft from "/icons/arrow_left.svg";
 
 interface Profile {
   id?: string;
@@ -84,34 +87,43 @@ export default function NewPostPage() {
     ? getStorageURL(profileQuery.data.img_url)
     : "";
   return (
-    <div className="new-post">
-      <h1>New Post</h1>
-      <img src="" alt="Upload" className="uploadArea" />
-      <form onSubmit={handleUpload} className="newPostForm">
-        <input type="file" name="" id="" ref={fileRef} />
+    <div className="main-container">
+      <div className="profile-header">
         <div>
-          <img src={imageUrl!} alt={profile.name!} className="avatar" />
-          <textarea
-            className="text-f"
-            placeholder="Write a caption..."
-            ref={postTextRef}
-            onInput={handleInput}
-          ></textarea>
-          <img src={imageUrl!} alt={profile.name!} className="preview" />
+          <NavLink to={"/home"}>
+            <img src={arrowLeft} alt="back home button" />
+          </NavLink>
+          <h2>New Post</h2>
         </div>
-        <button>Upload</button>
-      </form>
-      <p className="location new-post-form">Add Location</p>
-      <div className="also-post new-post-form">
-        <p>Also post to</p>
-        <div>
-          <p>Facebook</p>
-        </div>
-        <div>
-          <p>X (Twitter)</p>
-        </div>
-        <div>
-          <p>Tumblr</p>
+      </div>
+      <div className="new-post">
+        <img src="" alt="Upload" className="uploadArea" />
+        <form onSubmit={handleUpload} className="newPostForm">
+          <input type="file" name="" id="" ref={fileRef} />
+          <div>
+            <img src={imageUrl!} alt={profile.name!} className="avatar" />
+            <textarea
+              className="text-f"
+              placeholder="Write a caption..."
+              ref={postTextRef}
+              onInput={handleInput}
+            ></textarea>
+            <img src={imageUrl!} alt={profile.name!} className="preview" />
+          </div>
+          <button>Upload</button>
+        </form>
+        <p className="location new-post-form">Add Location</p>
+        <div className="also-post new-post-form">
+          <p>Also post to</p>
+          <div>
+            <p>Facebook</p>
+          </div>
+          <div>
+            <p>X (Twitter)</p>
+          </div>
+          <div>
+            <p>Tumblr</p>
+          </div>
         </div>
       </div>
     </div>
