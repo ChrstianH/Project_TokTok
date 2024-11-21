@@ -84,7 +84,7 @@ export default function NewPostPage() {
     ? getStorageURL(profileQuery.data.img_url)
     : "";
   return (
-    <div>
+    <div className="new-post">
       <h1>New Post</h1>
       <img src="" alt="Upload" className="uploadArea" />
       <form onSubmit={handleUpload} className="newPostForm">
@@ -93,6 +93,7 @@ export default function NewPostPage() {
           <img src={imageUrl!} alt={profile.name!} className="avatar" />
           <textarea
             className="text-f"
+            placeholder="Write a caption..."
             ref={postTextRef}
             onInput={handleInput}
           ></textarea>
@@ -100,6 +101,19 @@ export default function NewPostPage() {
         </div>
         <button>Upload</button>
       </form>
+      <p className="location new-post-form">Add Location</p>
+      <div className="also-post new-post-form">
+        <p>Also post to</p>
+        <div>
+          <p>Facebook</p>
+        </div>
+        <div>
+          <p>X (Twitter)</p>
+        </div>
+        <div>
+          <p>Tumblr</p>
+        </div>
+      </div>
     </div>
   );
 }
