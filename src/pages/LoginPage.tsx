@@ -13,15 +13,22 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Send Form", { email, password });
-    // Supabase form processing here
-    const result = await supabase.auth.signInWithPassword({ email, password });
-    if (result.error) {
-      alert(result.error.message);
-    } else {
-      setUser(result.data.user);
-      console.log(result);
-      navigate("/home");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        alert(error.message);
+      } else {
+        setUser(data.user);
+
+        localStorage.setItem("userId", data.user?.id!);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Error logging in", error);
     }
   };
 
