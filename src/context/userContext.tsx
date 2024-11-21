@@ -3,11 +3,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 
 interface User extends SupabaseUser {
-  img_url: string | null;
-}
-
-interface User extends SupabaseUser {
-  img_url: string | null;
+  img_url?: string | null;
 }
 
 interface UserContext {
