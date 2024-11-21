@@ -7,6 +7,7 @@ import logo from "/Logo.svg";
 import addIcon from "/icons/plus_icon.svg";
 import editIcon from "/icons/edit_icon.svg";
 import moreIcon from "/icons/more_icon.svg";
+import placeholderImg from "/placeholder-profileImg.png";
 
 interface Profile {
   id: string;
@@ -88,16 +89,21 @@ export default function ProfilePage() {
       </div>
       <div className="profile-container">
         <div>
-          <img
-            src={imageUrl || "https://placehold.co/300x300"}
-            alt={profile?.user_name || "userimg"}
-          />
-          <h2>{profile?.name}</h2>
-          <h4>{profile?.occupation}</h4>
-          <p>{profile?.slogan}</p>
-          <a href={profile?.website || "www.yourdomain.com"}>
-            {profile?.website}
-          </a>
+          <div className="image-container">
+            <img
+              src={imageUrl || placeholderImg}
+              alt={profile?.user_name || "userimg"}
+              className="profile-picture"
+            />
+          </div>
+          <div className="profile-details">
+            <h2>{profile?.name}</h2>
+            <h4>{profile?.occupation}</h4>
+            <p>{profile?.slogan}</p>
+            <a href={profile?.website || "www.yourdomain.com"}>
+              {profile?.website}
+            </a>
+          </div>
         </div>
         <div className="follower-container">
           <p>Posts</p>
