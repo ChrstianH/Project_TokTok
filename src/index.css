@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Urbanist";
-  src: url(/fonts/Urbanist-VariableFont_wght.ttf);
+  src: url(../public/fonts/Urbanist-VariableFont_wght.ttf);
 }
 
 * {
@@ -22,45 +22,10 @@ html {
 main {
   background-color: white;
   height: 100%;
-  width: 428px;
   margin-top: 2%;
-  position: relative;
 }
 
 /* LoadingScreen */
-
-/* NavBar */
-nav {
-  width: 428px;
-  display: flex;
-  justify-content: space-evenly;
-  text-align: center;
-  background-color: white;
-  border-top: 1px solid #9e9e9e;
-  border-radius: 10%;
-  padding-top: 1em;
-  padding-bottom: 0.5em;
-  position: fixed;
-  bottom: 0;
-}
-nav a {
-  text-decoration: none;
-}
-nav img {
-  height: 20px;
-}
-nav p {
-  font-size: 10px;
-  color: #9e9e9e;
-}
-/* .active,
-.active circle,
-.active path,
-.active rect {
-  fill: #ff4d67;
-  stroke: #ff4d67;
-  color: #ff4d67;
-} */
 
 /* LoginPage  */
 
@@ -189,4 +154,54 @@ input,
 select {
   width: 90%;
   height: 2rem;
+}
+
+/* NewPostPage */
+
+.newPostForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.newPostForm > div {
+  display: flex;
+  gap: 16px;
+}
+.newPostForm > button {
+  width: fit-content;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  align-self: center;
+  text-align: center;
+  color: white;
+  background-color: #ff4d67;
+  padding: 10px 24px;
+  width: 270px;
+  border-radius: 100px;
+}
+
+.preview,
+.avatar {
+  height: 56px;
+  width: 56px;
+}
+.avatar {
+  border-radius: 28px;
+}
+.preview {
+  border-radius: 8px;
+}
+
+.text-f {
+  border: none;
+  background-color: #fafafa;
+  color: #183a4c;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  width: 100%;
+  resize: none;
+  height: 40px;
 }

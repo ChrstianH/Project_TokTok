@@ -17,15 +17,8 @@ interface Profile {
   website: string | null | undefined;
 }
 
-interface Post {
-  img_url: string | null;
-  text: string;
-  user_id: string;
-}
-
 export default function NewPostPage() {
   const { user } = useUserContext();
-  console.log(user);
 
   let profile: Profile | null = {
     id: "",
@@ -57,8 +50,14 @@ export default function NewPostPage() {
   });
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const postTextRef = useRef<HTMLTextAreaElement>(null);
 
   let imagePath: string | null = null;
+
+  const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    e.currentTarget.style.height = "";
+    e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
+  };
 
   const file = fileRef.current?.files?.[0] || null;
   const handleUpload = async (e: React.FormEvent) => {
@@ -72,28 +71,33 @@ export default function NewPostPage() {
         .from("post_img")
         .upload(`${user.id}/${crypto.randomUUID()}`, file, { upsert: true });
       imagePath = uploadResult.data?.fullPath || null;
-      console.log(imagePath?.toString());
     }
 
     await supabase.from("posts").insert({
       img_url: imagePath,
-      text: "",
+      text: postTextRef.current?.value || "",
       user_id: user.id,
     });
   };
 
-  console.log(profileQuery.data?.img_url);
   const imageUrl = profileQuery.data?.img_url
     ? getStorageURL(profileQuery.data.img_url)
     : "";
-  console.log(imageUrl);
   return (
     <div>
       <h1>New Post</h1>
       <img src="" alt="Upload" className="uploadArea" />
-      <form onSubmit={handleUpload}>
+      <form onSubmit={handleUpload} className="newPostForm">
         <input type="file" name="" id="" ref={fileRef} />
-        <img src={imageUrl!} alt={profile.name!} />
+        <div>
+          <img src={imageUrl!} alt={profile.name!} className="avatar" />
+          <textarea
+            className="text-f"
+            ref={postTextRef}
+            onInput={handleInput}
+          ></textarea>
+          <img src={imageUrl!} alt={profile.name!} className="preview" />
+        </div>
         <button>Upload</button>
       </form>
     </div>
