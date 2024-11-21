@@ -30,7 +30,7 @@ export default function RegisterPage() {
     }
   };
   return (
-    <div>
+    <div className="main-container">
       <div>
         <h1>Create your Account</h1>
         <img src={logo} alt="" />

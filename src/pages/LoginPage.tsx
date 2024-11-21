@@ -33,7 +33,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
+    <div className="main-container">
       <div>
         <h1>Login to your Account</h1>
         <img src={logo} alt="toktok-logo" />

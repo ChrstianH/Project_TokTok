@@ -66,7 +66,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div>
+    <div className="main-container">
       <div className="profile-header">
         <div>
           <NavLink to={"/home"}>

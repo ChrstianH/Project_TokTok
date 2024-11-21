@@ -28,6 +28,7 @@ main {
 }
 .main-container {
   padding: 1.2rem;
+  min-height: 100vh;
 }
 /* LoadingScreen */
 /* NavBar */
@@ -69,18 +70,47 @@ nav p {
 
 /* HomePage  */
 
-.homepage-img {
+.home-header {
+  display: flex;
+  margin-bottom: 2rem;
+}
+.home-header img {
+  width: 45px;
+  padding-right: 1rem;
+}
+.home-header h1 {
+  font-size: 24px;
+}
+
+.post-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.post-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.2rem 0;
+}
+.post-img {
   width: 350px;
   border-radius: 20px;
 }
-
+.post-text {
+  width: 350px;
+}
+.interaction-container {
+  display: flex;
+  padding: 1rem 0;
+}
 /* ProfilePage */
 
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem;
+  padding: 0 1.2rem;
 }
 
 .profile-header img {
