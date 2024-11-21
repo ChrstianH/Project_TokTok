@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase-types";
 import searchIcon from "../assets/Search.svg";
+import { Session } from "@supabase/supabase-js";
 
 type UserProfile = Database["public"]["Tables"]["profiles"]["Row"];
-type UserProfileWithImage = UserProfile & { imageUrl: string };
+type UserProfileWithImage = UserProfile & {
+  imageUrl: string;
+  isFollowing: boolean;
+};
 
 export default function SearchPage() {
+  // Search Section
+
   const [searchText, setSearchText] = useState<string>("");
   const [users, setUsers] = useState<UserProfileWithImage[]>([]);
 
@@ -16,7 +22,17 @@ export default function SearchPage() {
       setUsers([]);
       return;
     }
-    let query = supabase.from("profiles").select("*");
+    if (!currentUserId) {
+      setUsers([]);
+      return;
+    }
+    let query = supabase
+      .from("profiles")
+      .select(
+        `*,
+    follower:follower_profile_id_fkey(user_id)`
+      )
+      .neq("id", currentUserId);
     if (searchText) {
       query = query.ilike("user_name", `%${searchText}%`);
     }
@@ -35,9 +51,14 @@ export default function SearchPage() {
           .from("profile_img")
           .getPublicUrl(filePath);
 
+        const isFollowing = user.follower.some(
+          (follow: any) => follow.user_id === currentUserId
+        );
+
         return {
           ...user,
           imageUrl: imageData?.publicUrl || "",
+          isFollowing,
         };
       });
       setUsers(usersWithImage);
@@ -48,8 +69,78 @@ export default function SearchPage() {
     fetchUsers(searchText);
   }, [searchText]);
 
+  // fetch Session Section
+
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    const getCurrentSession = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
+        return;
+      }
+      setSession(session);
+    };
+
+    getCurrentSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  const currentUserId = session?.user?.id;
+
+  // follow Section
+  const handleFollow = async (followedId: string) => {
+    if (!currentUserId) return;
+
+    const { data, error } = await supabase
+      .from("follower")
+      .insert([{ user_id: currentUserId, profile_id: followedId }]);
+
+    if (error) {
+      console.error("Error while following:", error);
+    } else {
+      console.log("Following 1");
+      fetchUsers(searchText);
+      console.log("Following 2");
+    }
+  };
+
+  //unfollow Section
+  const handleUnfollow = async (followedId: string) => {
+    if (!currentUserId) return;
+
+    const { data, error } = await supabase
+      .from("follower")
+      .delete()
+      .match({ user_id: currentUserId, profile_id: followedId });
+
+    if (error) {
+      console.error("Error exiting the follow up:", error);
+    } else {
+      console.log("Dropped from follow-up 1");
+      fetchUsers(searchText);
+      console.log("Dropped from follow-up 2");
+    }
+  };
+
   return (
     <div className="search-page" style={{ padding: "20px" }}>
+      {/* <div>
+        <h1>Current User ID: {currentUserId || "Not logged in"}</h1>
+      </div> */}
       <div
         className="search-bar"
         style={{
@@ -134,19 +225,26 @@ export default function SearchPage() {
                 <div style={{ fontSize: "14px" }}>{user.occupation}</div>
               </div>
             </div>
-            <button
-              style={{
-                padding: "8px 20px",
-                borderRadius: "20px",
-                fontSize: "14px",
-                backgroundColor: "#FF4D67",
-                color: "white",
-                transition: "all 0.3s",
-                border: "none",
-              }}
-            >
-              Follow
-            </button>
+            {user.id !== currentUserId && (
+              <button
+                onClick={() =>
+                  user.isFollowing
+                    ? handleUnfollow(user.id)
+                    : handleFollow(user.id)
+                }
+                style={{
+                  padding: "8px 20px",
+                  borderRadius: "20px",
+                  fontSize: "14px",
+                  backgroundColor: user.isFollowing ? "#ccc" : "#FF4D67",
+                  color: user.isFollowing ? "#000" : "#fff",
+                  transition: "all 0.3s",
+                  border: "none",
+                }}
+              >
+                {user.isFollowing ? "Following" : "Follow"}
+              </button>
+            )}
           </div>
         ))}
       </div>
