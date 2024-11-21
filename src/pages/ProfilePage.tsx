@@ -3,10 +3,10 @@ import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import logo from "../../public/Logo.svg";
-import addIcon from "../../public/icons/plus_icon.svg";
-import editIcon from "../../public/icons/edit_icon.svg";
-import moreIcon from "../../public/icons/more_icon.svg";
+import logo from "/Logo.svg";
+import addIcon from "/icons/plus_icon.svg";
+import editIcon from "/icons/edit_icon.svg";
+import moreIcon from "/icons/more_icon.svg";
 
 interface Profile {
   id: string;
@@ -49,6 +49,7 @@ export default function ProfilePage() {
   }, [user]);
 
   console.log(user);
+  console.log(imageUrl);
 
   const navigate = useNavigate();
 
@@ -67,7 +68,10 @@ export default function ProfilePage() {
     <div>
       <div className="profile-header">
         <div>
-          <img src={logo} alt="toktok_logo" />
+          <NavLink to={"/home"}>
+            <img src={logo} alt="toktok_logo" />
+          </NavLink>
+
           <h2>{profile?.user_name}</h2>
         </div>
         <div className="profile-icons">
@@ -84,7 +88,10 @@ export default function ProfilePage() {
       </div>
       <div className="profile-container">
         <div>
-          <img src={imageUrl || "https://placehold.co/600x900"} alt="" />
+          <img
+            src={imageUrl || "https://placehold.co/300x300"}
+            alt={profile?.user_name || "userimg"}
+          />
           <h2>{profile?.name}</h2>
           <h4>{profile?.occupation}</h4>
           <p>{profile?.slogan}</p>

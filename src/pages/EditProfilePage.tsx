@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import arrowLeft from "../../public/icons/arrow_left.svg";
 import { useUserContext } from "../context/userContext";
 import { supabase } from "../lib/supabase";
@@ -15,39 +15,94 @@ export default function EditProfilePage() {
   const genderInputRef = useRef<HTMLSelectElement>(null);
 
   const { user } = useUserContext();
-
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [profileData, setProfileData] = useState<{
+    birthday?: string;
+    gender?: string;
+    user_name?: string;
+  }>({});
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (user) {
+        setIsLoading(true);
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("birthday, gender, user_name")
+          .eq("id", user.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile data:", error);
+        } else {
+          const convertedData = {
+            birthday: data.birthday || undefined,
+            gender: data.gender || undefined,
+            user_name: data.user_name || undefined,
+          };
+          setProfileData(convertedData);
+        }
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfileData();
+  }, [user]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     if (!user) {
       return;
     }
     e.preventDefault();
-    const file = imageInputRef.current?.files?.[0] || null;
 
-    let imagePath: string | null = null;
+    const updates: {
+      name?: string;
+      user_name?: string;
+      img_url?: string | null;
+      occupation?: string;
+      slogan?: string;
+      birthday?: string;
+      website?: string;
+      gender?: string;
+    } = {};
 
+    const file = imageInputRef.current?.files?.[0];
     if (file) {
       const uploadResult = await supabase.storage
         .from("profile_img")
         .upload(`${user.id}/${crypto.randomUUID()}`, file, { upsert: true });
-      imagePath = uploadResult.data?.fullPath || null;
+      updates.img_url = uploadResult.data?.fullPath || null;
     }
 
-    await supabase
-      .from("profiles")
-      .update({
-        name: nameInputRef.current!.value,
-        user_name: userNameInputRef.current!.value,
-        img_url: imagePath,
-        occupation: occupationInputRef.current!.value,
-        slogan: bioInputRef.current!.value,
-        birthday: birthdayInputRef.current!.value,
-        website: websiteInputRef.current!.value,
-        gender: genderInputRef.current!.value,
-      })
-      .eq("id", user.id);
-    navigate("/:userID/profile");
+    if (nameInputRef.current!.value) {
+      updates.name = nameInputRef.current!.value;
+    }
+    if (userNameInputRef.current!.value) {
+      updates.user_name = userNameInputRef.current!.value;
+    }
+    if (occupationInputRef.current!.value) {
+      updates.occupation = occupationInputRef.current!.value;
+    }
+    if (bioInputRef.current!.value) {
+      updates.slogan = bioInputRef.current!.value;
+    }
+    if (birthdayInputRef.current!.value) {
+      updates.birthday = birthdayInputRef.current!.value;
+    }
+    if (websiteInputRef.current!.value) {
+      updates.website = websiteInputRef.current!.value;
+    }
+    if (genderInputRef.current!.value) {
+      updates.gender = genderInputRef.current!.value;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await supabase.from("profiles").update(updates).eq("id", user.id);
+    }
+
+    navigate(`/${user.id}/profile`);
   };
 
   return (
@@ -61,57 +116,71 @@ export default function EditProfilePage() {
         </div>
       </div>
       <div className="details-container">
-        <form onSubmit={handleSubmit}>
-          <input
-            ref={imageInputRef}
-            type="file"
-            name="image"
-            placeholder="upload image"
-          />
-          <input
-            ref={nameInputRef}
-            type="text"
-            name="name"
-            placeholder="your name"
-          />
-          <input
-            ref={userNameInputRef}
-            type="text"
-            name="userName"
-            placeholder="your user name"
-          />
-          <input
-            ref={occupationInputRef}
-            type="text"
-            name="occupation"
-            placeholder="your jobtitle"
-          />
-          <input
-            ref={bioInputRef}
-            type="text"
-            name="bio"
-            placeholder="tell us sth about yourself"
-          />
-          <input
-            ref={birthdayInputRef}
-            type="date"
-            name="birthday"
-            id="birthday"
-            placeholder="your birthdate"
-          />
-          <select ref={genderInputRef} name="gender" id="gender">
-            <option value="male">male</option>
-            <option value="female">female</option>
-            <option value="divers">divers</option>
-          </select>
-          <input
-            ref={websiteInputRef}
-            type="text"
-            name="website"
-            placeholder="your website"
-          />
-          <button>Update</button>
-        </form>
+        {isLoading ? (
+          <p>Loading profile data...</p>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <input
+              ref={imageInputRef}
+              type="file"
+              name="image"
+              placeholder="upload image"
+            />
+            <input
+              ref={nameInputRef}
+              type="text"
+              name="name"
+              placeholder="your name"
+            />
+            <input
+              ref={userNameInputRef}
+              type="text"
+              name="userName"
+              placeholder="your user name"
+              defaultValue={profileData.user_name || ""}
+              disabled={!!profileData.user_name}
+            />
+            <input
+              ref={occupationInputRef}
+              type="text"
+              name="occupation"
+              placeholder="your jobtitle"
+            />
+            <input
+              ref={bioInputRef}
+              type="text"
+              name="bio"
+              placeholder="tell us sth about yourself"
+            />
+            <input
+              ref={birthdayInputRef}
+              type="date"
+              name="birthday"
+              id="birthday"
+              placeholder="your birthdate"
+              defaultValue={profileData.birthday || ""}
+              disabled={!!profileData.birthday}
+            />
+            <select
+              ref={genderInputRef}
+              name="gender"
+              id="gender"
+              defaultValue={profileData.gender || ""}
+              disabled={!!profileData.gender}
+            >
+              <option value="male">male</option>
+              <option value="female">female</option>
+              <option value="divers">divers</option>
+            </select>
+            <input
+              ref={websiteInputRef}
+              type="text"
+              name="website"
+              placeholder="your website"
+            />
+            <button>Update</button>
+          </form>
+        )}
       </div>
     </div>
   );
