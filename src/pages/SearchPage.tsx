@@ -1,66 +1,21 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase-types";
+import searchIcon from "../assets/Search.svg";
 
 type UserProfile = Database["public"]["Tables"]["profiles"]["Row"];
 type UserProfileWithImage = UserProfile & { imageUrl: string };
 
 export default function SearchPage() {
-  // const users = [
-  //   {
-  //     username: "angelinaa_",
-  //     role: "Web Designer",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  //   {
-  //     username: "angelina_tamara",
-  //     role: "President of Sales",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: true,
-  //   },
-  //   {
-  //     username: "angelina_77",
-  //     role: "Web Designer",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  //   {
-  //     username: "angelina_angie",
-  //     role: "Nursing Assistant",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: true,
-  //   },
-  //   {
-  //     username: "angelina_hawky",
-  //     role: "Dog Trainer",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  //   {
-  //     username: "angelina_cooper",
-  //     role: "Medical Assistant",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  //   {
-  //     username: "angelina_nguyen",
-  //     role: "Marketing Coordinator",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  //   {
-  //     username: "angelina_lane",
-  //     role: "Software Engineer",
-  //     image: "/placeholder.svg?height=40&width=40",
-  //     following: false,
-  //   },
-  // ];
   const [searchText, setSearchText] = useState<string>("");
-  const [user, setUser] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<UserProfileWithImage[]>([]);
 
   // fetch users from the supabase
   const fetchUsers = async (searchText: string = "") => {
+    if (!searchText) {
+      setUsers([]);
+      return;
+    }
     let query = supabase.from("profiles").select("*");
     if (searchText) {
       query = query.ilike("user_name", `%${searchText}%`);
@@ -85,7 +40,7 @@ export default function SearchPage() {
           imageUrl: imageData?.publicUrl || "",
         };
       });
-      setUser(usersWithImage);
+      setUsers(usersWithImage);
     }
   };
 
@@ -103,28 +58,45 @@ export default function SearchPage() {
           marginBottom: "20px",
         }}
       >
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          style={{
-            width: "90%",
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "20px",
-            fontSize: "16px",
-            outline: "none",
-          }}
-        />
+        <div
+          className="search-input-container"
+          style={{ position: "relative", width: "90%" }}
+        >
+          <img
+            src={searchIcon}
+            alt="Search Icon"
+            className="search-icon"
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          />
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "20px 20px 20px 40px",
+              border: "1px solid #ccc",
+              borderRadius: "20px",
+              fontSize: "16px",
+              outline: "none",
+            }}
+          />
+        </div>
       </div>
       <div
         className="user-list"
         style={{ display: "flex", flexDirection: "column", gap: "10px" }}
       >
-        {user.map((user, index) => (
+        {users.map((user) => (
           <div
-            key={index}
+            key={user.id}
             className="user-card"
             style={{
               display: "flex",
@@ -143,7 +115,7 @@ export default function SearchPage() {
             >
               <img
                 src={user.imageUrl || "https://via.placeholder.com/50"}
-                alt={user.user_name}
+                alt={user.user_name || "user avatar"}
                 className="search-avatar"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
