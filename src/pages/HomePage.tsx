@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabase";
+import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { useUserContext } from "../context/userContext";
 
@@ -45,6 +45,7 @@ export default function HomePage() {
 
   const posts = postQuery.data;
   const profile = profileQuery.data;
+  const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : "";
 
   return (
     <div>
@@ -52,18 +53,14 @@ export default function HomePage() {
         posts.map((post: Post) => (
           <div>
             <div>
-              <img
-                src={profile?.img_url!}
-                alt={profile?.name}
-                className="avatar"
-              />
+              <img src={imageUrl!} alt={profile?.name!} className="avatar" />
               <b>{profile?.user_name}</b>
               <p>{profile?.occupation}</p>
             </div>
             <div>
               <button></button>
             </div>
-            <img src={post.img_url!} alt={post.text} />
+            <img src={getStorageURL(post.img_url!) || ""} alt={post.text} />
             <p>Likes: viele</p>
             <p>Comments: nicht ganz so viele</p>
           </div>
