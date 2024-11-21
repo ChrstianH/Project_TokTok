@@ -1,8 +1,11 @@
 import { useRef, useState, useEffect } from "react";
-import arrowLeft from "../../public/icons/arrow_left.svg";
 import { useUserContext } from "../context/userContext";
-import { supabase } from "../lib/supabase";
+import { getStorageURL, supabase } from "../lib/supabase";
 import { NavLink, useNavigate } from "react-router-dom";
+
+import arrowLeft from "/icons/arrow_left.svg";
+import editIcon from "/icons/editImg.svg";
+import placeholderImg from "/placeholder-profileImg.png";
 
 export default function EditProfilePage() {
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +25,17 @@ export default function EditProfilePage() {
     birthday?: string;
     gender?: string;
     user_name?: string;
+    name?: string;
   }>({});
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -30,7 +43,7 @@ export default function EditProfilePage() {
         setIsLoading(true);
         const { data, error } = await supabase
           .from("profiles")
-          .select("birthday, gender, user_name")
+          .select("birthday, gender, user_name, name")
           .eq("id", user.id)
           .single();
 
@@ -41,6 +54,7 @@ export default function EditProfilePage() {
             birthday: data.birthday || undefined,
             gender: data.gender || undefined,
             user_name: data.user_name || undefined,
+            name: data.name || undefined,
           };
           setProfileData(convertedData);
         }
@@ -119,18 +133,50 @@ export default function EditProfilePage() {
         {isLoading ? (
           <p>Loading profile data...</p>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <input
-              ref={imageInputRef}
-              type="file"
-              name="image"
-              placeholder="upload image"
-            />
+          <form onSubmit={handleSubmit} className="edit-form">
+            <div className="profile-picture-container">
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt="Profilbild Vorschau"
+                  className="profile-picture"
+                />
+              ) : (
+                <div className="placeholder-picture">
+                  {user?.img_url ? (
+                    <img
+                      src={
+                        user?.img_url ? getStorageURL(user.img_url) ?? "" : ""
+                      }
+                      alt="profile-picture"
+                      className="profile-picture"
+                    />
+                  ) : (
+                    <img src={placeholderImg} alt="" />
+                  )}
+                </div>
+              )}
+              <label htmlFor="profile-picture-upload" className="upload-button">
+                <img src={editIcon} alt="" />
+              </label>
+              <input
+                ref={imageInputRef}
+                type="file"
+                name="image"
+                placeholder="upload image"
+                id="profile-picture-upload"
+                accept="image/*"
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
+            </div>
             <input
               ref={nameInputRef}
               type="text"
               name="name"
               placeholder="your name"
+              defaultValue={profileData.name || ""}
+              disabled={!!profileData.name}
             />
             <input
               ref={userNameInputRef}
