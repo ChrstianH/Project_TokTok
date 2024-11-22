@@ -4,6 +4,7 @@ import { Database } from "../types/supabase-types";
 import searchIcon from "../assets/Search.svg";
 import { Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
+import FollowerButton from "../components/FollowerButton";
 
 type UserProfile = Database["public"]["Tables"]["profiles"]["Row"];
 type UserProfileWithImage = UserProfile & {
@@ -102,47 +103,9 @@ export default function SearchPage() {
 
   const currentUserId = session?.user?.id;
 
-  // follow Section
-  const handleFollow = async (followedId: string) => {
-    if (!currentUserId) return;
-
-    const { data, error } = await supabase
-      .from("follower")
-      .insert([{ user_id: currentUserId, profile_id: followedId }]);
-
-    if (error) {
-      console.error("Error while following:", error);
-    } else {
-      console.log("Following 1");
-      fetchUsers(searchText);
-      console.log("Following 2");
-    }
-  };
-
-  //unfollow Section
-  const handleUnfollow = async (followedId: string) => {
-    if (!currentUserId) return;
-
-    const { data, error } = await supabase
-      .from("follower")
-      .delete()
-      .match({ user_id: currentUserId, profile_id: followedId });
-
-    if (error) {
-      console.error("Error exiting the follow up:", error);
-    } else {
-      console.log("Dropped from follow-up 1");
-      fetchUsers(searchText);
-      console.log("Dropped from follow-up 2");
-    }
-  };
-
   return (
     <div className="main-container">
       <div className="search-page" style={{ padding: "20px" }}>
-        {/* <div>
-        <h1>Current User ID: {currentUserId || "Not logged in"}</h1>
-      </div> */}
         <div
           className="search-bar"
           style={{
@@ -231,24 +194,12 @@ export default function SearchPage() {
                 </div>
               </div>
               {user.id !== currentUserId && (
-                <button
-                  onClick={() =>
-                    user.isFollowing
-                      ? handleUnfollow(user.id)
-                      : handleFollow(user.id)
-                  }
-                  style={{
-                    padding: "8px 20px",
-                    borderRadius: "20px",
-                    fontSize: "14px",
-                    backgroundColor: user.isFollowing ? "#ccc" : "#FF4D67",
-                    color: user.isFollowing ? "#000" : "#fff",
-                    transition: "all 0.3s",
-                    border: "none",
-                  }}
-                >
-                  {user.isFollowing ? "Following" : "Follow"}
-                </button>
+                <FollowerButton
+                  currentUserId={currentUserId}
+                  followedId={user.id}
+                  isFollowing={user.isFollowing}
+                  onFollowChange={() => fetchUsers(searchText)}
+                />
               )}
             </div>
           ))}

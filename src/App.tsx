@@ -1,26 +1,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// import { useEffect } from "react";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NewPostPage from "./pages/NewPostPage";
 import SearchPage from "./pages/SearchPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout";
-
 import OtherProfilePage from "./pages/OtherProfilePage";
-
 import CommentsPage from "./pages/CommentsPage";
-import Followers from "./pages/Followers";
+import ShowFollowerPage from "./pages/ShowFollowerPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const client = new QueryClient();
 
@@ -51,8 +43,8 @@ export default function App() {
               />
               <Route path="/:userID/new-post" element={<NewPostPage />} />
               <Route
-                path="/:userID/profile/followers"
-                element={<Followers />}
+                path="/:userId/profile/follower"
+                element={<ShowFollowerPage />}
               />
               <Route
                 path="/other-profile/:profileID"
