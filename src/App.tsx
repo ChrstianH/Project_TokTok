@@ -17,6 +17,7 @@ import EditProfilePage from "./pages/EditProfilePage";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout";
 import CommentsPage from "./pages/CommentsPage";
+import Followers from "./pages/Followers";
 
 const client = new QueryClient();
 
@@ -41,6 +42,10 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/home" element={<HomePage />} />
               <Route path="/:userID/profile" element={<ProfilePage />} />
+              <Route
+                path="/:userID/profile/followers"
+                element={<Followers />}
+              />
               <Route path="/:userID/new-post" element={<NewPostPage />} />
               <Route
                 path="/:userID/edit-profile"

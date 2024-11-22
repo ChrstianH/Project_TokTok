@@ -9,6 +9,12 @@ import editIcon from "/icons/edit_icon.svg";
 import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
 
+import { Tables } from "../types/supabase-types";
+
+interface Follower {
+  profile_id: string;
+  user_id: string;
+}
 interface Profile {
   id: string;
   img_url: string | null;
@@ -21,20 +27,23 @@ interface Profile {
   phone: string | null;
   gender: string | null;
   website: string | null;
+  follower: Follower[];
+  following: Follower[];
 }
 
 export default function ProfilePage() {
   const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
-
+  const [following, setFollowing] = useState<Tables<"follower">[]>();
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select("*")
+          .select(`*, follower:follower_profile_id_fkey(*)`)
           .eq("id", user.id)
           .single();
 
@@ -46,13 +55,31 @@ export default function ProfilePage() {
       }
     };
 
+    const fetchFollowing = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from("follower")
+          .select("*")
+          .eq("user_id", user.id);
+        if (error) {
+          console.error("Error loading user profile:", error);
+        } else {
+          setFollowing(data);
+        }
+      }
+    };
+
     fetchProfile();
+    fetchFollowing();
   }, [user]);
+
+  useEffect(() => {
+    console.log("*******");
+    console.log(profile);
+  }, [profile]);
 
   console.log(user);
   console.log(imageUrl);
-
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -63,6 +90,12 @@ export default function ProfilePage() {
     } catch (error) {
       console.error("Fehler beim Logout:", error);
     }
+  };
+
+  const handleFollowersClick = () => {
+    navigate(`/${user?.id}/profile/followers`, {
+      state: { followers: profile?.follower },
+    });
   };
 
   return (
@@ -106,9 +139,25 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="follower-container">
-          <p>Posts</p>
-          <p>Followers</p>
-          <p>Following</p>
+          <div className="follower-container-info">
+            <p>0</p>
+            <p>Posts</p>
+          </div>
+
+          <span className="follower-container-span"></span>
+
+          <div
+            className="follower-container-info"
+            onClick={handleFollowersClick}
+          >
+            <p>{profile?.follower.length}</p>
+            <p>Followers</p>
+          </div>
+          <span className="follower-container-span"></span>
+          <div className="follower-container-info">
+            <p>{following ? following.length : 0}</p>
+            <p>Following</p>
+          </div>
         </div>
       </div>
       <div className="user-posts">{/* <UserPosts/> */}</div>
