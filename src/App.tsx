@@ -22,7 +22,6 @@ import OtherProfilePage from "./pages/OtherProfilePage";
 import CommentsPage from "./pages/CommentsPage";
 import Followers from "./pages/Followers";
 
-
 const client = new QueryClient();
 
 export default function App() {
@@ -44,22 +43,20 @@ export default function App() {
             {/* <Route path="/login" element={<LoginPage/>}/> */}
             <Route path="/signup" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
-
-              <Route
-                path="/other-profile/:profileID"
-                element={<OtherProfilePage />}
-
               <Route path="/home" element={<HomePage />} />
               <Route path="/:userID/profile" element={<ProfilePage />} />
               <Route
-                path="/:userID/profile/followers"
-                element={<Followers />}
-
+                path="/:userID/edit-profile"
+                element={<EditProfilePage />}
               />
               <Route path="/:userID/new-post" element={<NewPostPage />} />
               <Route
-                path="/:userID/edit-profile"
-                element={<EditProfilePage />}
+                path="/:userID/profile/followers"
+                element={<Followers />}
+              />
+              <Route
+                path="/other-profile/:profileID"
+                element={<OtherProfilePage />}
               />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/comments/:postId" element={<CommentsPage />} />
