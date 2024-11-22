@@ -78,7 +78,7 @@ export default function ProfilePage() {
         const { count, error } = await supabase
           .from("follower")
           .select("*", { count: "exact" })
-          .eq("profile_id", user.id); // Abfrage für Follower
+          .eq("profile_id", user.id);
         if (error) {
           console.error("Error loading follower count:", error);
         } else {
@@ -92,7 +92,7 @@ export default function ProfilePage() {
         const { count, error } = await supabase
           .from("follower")
           .select("*", { count: "exact" })
-          .eq("user_id", user.id); // Abfrage für Following
+          .eq("user_id", user.id);
         if (error) {
           console.error("Error loading following count:", error);
         } else {
@@ -104,8 +104,8 @@ export default function ProfilePage() {
     if (user) {
       fetchProfile();
       fetchPostCount();
-      fetchFollowerCount(); // Separate Abfrage für Follower
-      fetchFollowingCount(); // Separate Abfrage für Following
+      fetchFollowerCount();
+      fetchFollowingCount();
     }
   }, [user]);
 

@@ -9,7 +9,6 @@ interface FollowerInfoProps {
 }
 
 const FollowerInfo: React.FC<FollowerInfoProps> = ({
-  userId,
   postCount,
   followerCount,
   followingCount,
