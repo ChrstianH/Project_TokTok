@@ -112,8 +112,8 @@ export default function NewPostPage() {
           </div>
           <button>Upload</button>
         </form>
-        <p className="location new-post-form">Add Location</p>
-        <div className="also-post new-post-form">
+        <p className="location newPostForm">Add Location</p>
+        <div className="also-post newPostForm">
           <p>Also post to</p>
           <div>
             <p>Facebook</p>
