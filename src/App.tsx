@@ -16,6 +16,7 @@ import SearchPage from "./pages/SearchPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout";
+import CommentsPage from "./pages/CommentsPage";
 
 const client = new QueryClient();
 
@@ -37,13 +38,17 @@ export default function App() {
             {/* <Route path="/" element={<LoadingScreen />} /> */}
             {/* <Route path="/login" element={<LoginPage/>}/> */}
             <Route path="/signup" element={<RegisterPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/:userID/profile" element={<ProfilePage />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/:userID/profile" element={<ProfilePage />} />
               <Route path="/:userID/new-post" element={<NewPostPage />} />
+              <Route
+                path="/:userID/edit-profile"
+                element={<EditProfilePage />}
+              />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/comments/:postId" element={<CommentsPage />} />
             </Route>
-            <Route path="/:userID/edit-profile" element={<EditProfilePage />} />
-            <Route path="/search" element={<SearchPage />} />
 
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
