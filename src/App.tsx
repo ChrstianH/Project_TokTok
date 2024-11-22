@@ -16,8 +16,12 @@ import SearchPage from "./pages/SearchPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout";
+
+import OtherProfilePage from "./pages/OtherProfilePage";
+
 import CommentsPage from "./pages/CommentsPage";
 import Followers from "./pages/Followers";
+
 
 const client = new QueryClient();
 
@@ -40,11 +44,17 @@ export default function App() {
             {/* <Route path="/login" element={<LoginPage/>}/> */}
             <Route path="/signup" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
+
+              <Route
+                path="/other-profile/:profileID"
+                element={<OtherProfilePage />}
+
               <Route path="/home" element={<HomePage />} />
               <Route path="/:userID/profile" element={<ProfilePage />} />
               <Route
                 path="/:userID/profile/followers"
                 element={<Followers />}
+
               />
               <Route path="/:userID/new-post" element={<NewPostPage />} />
               <Route
