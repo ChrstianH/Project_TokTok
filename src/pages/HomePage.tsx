@@ -1,9 +1,9 @@
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-import { useUserContext } from "../context/userContext";
 import { NavLink } from "react-router-dom";
 
 import HashtagText from "../components/HashtagText";
+import PostInteraction from "../components/PostInteraction"; // Importierte Komponente
 
 import logo from "/Logo.svg";
 
@@ -21,9 +21,6 @@ interface PostWithProfile {
 }
 
 export default function HomePage() {
-  //den userContext brauchen wir dann später wieder wenn wir followen und kommentieren wollen
-  const { user } = useUserContext();
-
   const postsWithProfilesQuery = useQuery({
     queryKey: ["postsWithProfiles"],
     queryFn: async () => {
@@ -70,7 +67,7 @@ export default function HomePage() {
       </div>
       {postsWithProfiles.map((post: PostWithProfile) => (
         <div key={post.id}>
-          <div className="post-header     ">
+          <div className="post-header">
             <img
               src={getStorageURL(post.profiles.img_url!) || ""}
               alt={post.profiles.user_name}
@@ -84,15 +81,11 @@ export default function HomePage() {
           <div className="post-container">
             <img
               src={getStorageURL(post.img_url!) || ""}
-              // alt={post.text}
               className="post-img"
             />
             <HashtagText text={post.text} />
-            {/* <p className="post-text">{post.text}</p> */}
-            <div className="interaction-container">
-              <p>Likes: viele</p>
-              <p>Comments: nicht ganz so viele</p>
-            </div>
+
+            <PostInteraction postId={post.id} />
           </div>
         </div>
       ))}

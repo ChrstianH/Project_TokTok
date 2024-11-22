@@ -13,7 +13,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          is_liked: string | null
+          is_liked: boolean | null
           post_id: string
           text: string
           user_id: string
@@ -21,15 +21,15 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          is_liked?: string | null
+          is_liked?: boolean | null
           post_id: string
           text: string
-          user_id?: string
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          is_liked?: string | null
+          is_liked?: boolean | null
           post_id?: string
           text?: string
           user_id?: string
@@ -59,7 +59,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          profile_id?: string
+          profile_id: string
           user_id?: string
         }
         Update: {
@@ -77,6 +77,42 @@ export type Database = {
           },
           {
             foreignKeyName: "follower_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
