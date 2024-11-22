@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase";
 import { Database } from "../types/supabase-types";
 import searchIcon from "../assets/Search.svg";
 import { Session } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
 type UserProfile = Database["public"]["Tables"]["profiles"]["Row"];
 type UserProfileWithImage = UserProfile & {
@@ -15,7 +16,7 @@ export default function SearchPage() {
 
   const [searchText, setSearchText] = useState<string>("");
   const [users, setUsers] = useState<UserProfileWithImage[]>([]);
-
+  const navigate = useNavigate();
   // fetch users from the supabase
   const fetchUsers = async (searchText: string = "") => {
     if (!searchText) {
@@ -203,6 +204,9 @@ export default function SearchPage() {
             >
               <div
                 className="user-info"
+                onClick={() => {
+                  navigate(`/other-profile/${user.id}`);
+                }}
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
                 <img

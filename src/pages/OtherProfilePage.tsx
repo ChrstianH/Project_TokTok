@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 
 import logo from "/Logo.svg";
 import addIcon from "/icons/plus_icon.svg";
@@ -24,19 +24,20 @@ interface Profile {
   website: string | null;
 }
 
-export default function ProfilePage() {
+export default function OtherProfilePage() {
   const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
+  const { profileID } = useParams();
 
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (user) {
+      if (profileID) {
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
-          .eq("id", user.id)
+          .eq("id", profileID)
           .single();
 
         if (error) {
@@ -53,12 +54,12 @@ export default function ProfilePage() {
   const postCountQuery = useQuery({
     queryKey: [],
     queryFn: async () => {
-      if (user) {
+      if (profileID) {
         console.log("entered query 1");
         const posts = await supabase
           .from("posts")
           .select("id", { count: "exact" })
-          .eq("user_id", user.id)
+          .eq("user_id", profileID)
           .limit(1);
 
         console.log(posts);
@@ -70,12 +71,12 @@ export default function ProfilePage() {
   const followingCountQuery = useQuery({
     queryKey: [],
     queryFn: async () => {
-      if (user) {
+      if (profileID) {
         console.log("entered query 2");
         const following = await supabase
           .from("follower")
           .select("id", { count: "exact" })
-          .eq("user_id", user.id)
+          .eq("user_id", profileID)
           .limit(1);
         console.log(following);
         return following;
@@ -86,12 +87,12 @@ export default function ProfilePage() {
   const followerCountQuery = useQuery({
     queryKey: [],
     queryFn: async () => {
-      if (user) {
+      if (profileID) {
         console.log("entered query 3");
         const follower = await supabase
           .from("follower")
           .select("id", { count: "exact" })
-          .eq("profile_id", user.id)
+          .eq("profile_id", profileID)
           .limit(1);
         console.log(follower);
         return follower;
@@ -167,6 +168,7 @@ export default function ProfilePage() {
             <p>Following</p>
           </div>
         </div>
+        <button className="follow-btn">Follow</button>
       </div>
       <div className="user-posts">{/* <UserPosts/> */}</div>
     </div>
