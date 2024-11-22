@@ -10,6 +10,12 @@ import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
 import { useQuery } from "@tanstack/react-query";
 
+import { Tables } from "../types/supabase-types";
+
+interface Follower {
+  profile_id: string;
+  user_id: string;
+}
 interface Profile {
   id: string;
   img_url: string | null;
@@ -22,20 +28,23 @@ interface Profile {
   phone: string | null;
   gender: string | null;
   website: string | null;
+  follower: Follower[];
+  following: Follower[];
 }
 
 export default function ProfilePage() {
   const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
-
+  const [following, setFollowing] = useState<Tables<"follower">[]>();
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select("*")
+          .select(`*, follower:follower_profile_id_fkey(*)`)
           .eq("id", user.id)
           .single();
 
@@ -47,62 +56,28 @@ export default function ProfilePage() {
       }
     };
 
+    const fetchFollowing = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from("follower")
+          .select("*")
+          .eq("user_id", user.id);
+        if (error) {
+          console.error("Error loading user profile:", error);
+        } else {
+          setFollowing(data);
+        }
+      }
+    };
+
     fetchProfile();
+    fetchFollowing();
   }, [user]);
 
-  const postCountQuery = useQuery({
-    queryKey: [],
-    queryFn: async () => {
-      if (user) {
-        console.log("entered query 1");
-        const posts = await supabase
-          .from("posts")
-          .select("id", { count: "exact" })
-          .eq("user_id", user.id)
-          .limit(1);
 
-        console.log(posts);
-        return posts;
-      }
-    },
-  });
 
-  const followingCountQuery = useQuery({
-    queryKey: [],
-    queryFn: async () => {
-      if (user) {
-        console.log("entered query 2");
-        const following = await supabase
-          .from("follower")
-          .select("id", { count: "exact" })
-          .eq("user_id", user.id)
-          .limit(1);
-        console.log(following);
-        return following;
-      }
-    },
-  });
-
-  const followerCountQuery = useQuery({
-    queryKey: [],
-    queryFn: async () => {
-      if (user) {
-        console.log("entered query 3");
-        const follower = await supabase
-          .from("follower")
-          .select("id", { count: "exact" })
-          .eq("profile_id", user.id)
-          .limit(1);
-        console.log(follower);
-        return follower;
-      }
-    },
-  });
-
-  console.log(user);
+ console.log(user);
   console.log(imageUrl);
-
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -113,6 +88,12 @@ export default function ProfilePage() {
     } catch (error) {
       console.error("Fehler beim Logout:", error);
     }
+  };
+
+  const handleFollowersClick = () => {
+    navigate(`/${user?.id}/profile/followers`, {
+      state: { followers: profile?.follower },
+    });
   };
 
   return (
@@ -155,15 +136,26 @@ export default function ProfilePage() {
             </a>
           </div>
         </div>
-        <div className="other-follower-container">
-          <div className="other-follower-headlines">
-            <p>{postCountQuery.data?.count}</p>
-            <p>{followerCountQuery.data?.count}</p>
-            <p>{followingCountQuery.data?.count}</p>
-          </div>
-          <div className="other-follower-headlines">
+
+        <div className="follower-container">
+          <div className="follower-container-info">
+            <p>0</p>
             <p>Posts</p>
+          </div>
+
+          <span className="follower-container-span"></span>
+
+          <div
+            className="follower-container-info"
+            onClick={handleFollowersClick}
+          >
+            <p>{profile?.follower.length}</p>
             <p>Followers</p>
+          </div>
+          <span className="follower-container-span"></span>
+          <div className="follower-container-info">
+            <p>{following ? following.length : 0}</p>
+
             <p>Following</p>
           </div>
         </div>
