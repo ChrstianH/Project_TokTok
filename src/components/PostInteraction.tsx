@@ -25,10 +25,12 @@ const PostInteraction = ({ postId }: Props) => {
           .select("id")
           .eq("post_id", postId)
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
 
         if (error) {
-          console.error("Error fetching likes:", error);
+          if (error.code !== "PGRST116") {
+            console.error("Error fetching likes:", error);
+          }
         } else {
           setIsLiked(data !== null);
         }

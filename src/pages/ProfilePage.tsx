@@ -3,19 +3,13 @@ import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import logo from "/Logo.svg";
-import addIcon from "/icons/plus_icon.svg";
-import editIcon from "/icons/edit_icon.svg";
-import moreIcon from "/icons/more_icon.svg";
+import logo from "../../public/Logo.svg";
+import addIcon from "../../public/icons/plus_icon.svg";
+import editIcon from "../../public/icons/edit_icon.svg";
+import moreIcon from "../../public/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
-import { useQuery } from "@tanstack/react-query";
+import FollowerInfo from "../components/FollowerInfo";
 
-import { Tables } from "../types/supabase-types";
-
-interface Follower {
-  profile_id: string;
-  user_id: string;
-}
 interface Profile {
   id: string;
   img_url: string | null;
@@ -25,17 +19,19 @@ interface Profile {
   occupation: string | null;
   slogan: string | null;
   created_at: string;
-  phone: string | null;
   gender: string | null;
   website: string | null;
-  follower: Follower[];
-  following: Follower[];
+  follower: { user_id: string }[];
 }
 
 export default function ProfilePage() {
   const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
-  const [following, setFollowing] = useState<Tables<"follower">[]>();
+  const [postCount, setPostCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  1;
+
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
   const navigate = useNavigate();
 
@@ -44,7 +40,14 @@ export default function ProfilePage() {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select(`*, follower:follower_profile_id_fkey(*)`)
+          .select(
+            `
+            *, 
+            follower!follower_profile_id_fkey(
+              user_id
+            )
+          `
+          )
           .eq("id", user.id)
           .single();
 
@@ -56,28 +59,55 @@ export default function ProfilePage() {
       }
     };
 
-    const fetchFollowing = async () => {
+    const fetchPostCount = async () => {
       if (user) {
-        const { data, error } = await supabase
-          .from("follower")
-          .select("*")
+        const { count, error } = await supabase
+          .from("posts")
+          .select("*", { count: "exact" })
           .eq("user_id", user.id);
         if (error) {
-          console.error("Error loading user profile:", error);
+          console.error("Error loading post count:", error);
         } else {
-          setFollowing(data);
+          setPostCount(count || 0);
         }
       }
     };
 
-    fetchProfile();
-    fetchFollowing();
+    const fetchFollowerCount = async () => {
+      if (user) {
+        const { count, error } = await supabase
+          .from("follower")
+          .select("*", { count: "exact" })
+          .eq("profile_id", user.id); // Abfrage für Follower
+        if (error) {
+          console.error("Error loading follower count:", error);
+        } else {
+          setFollowerCount(count || 0);
+        }
+      }
+    };
+
+    const fetchFollowingCount = async () => {
+      if (user) {
+        const { count, error } = await supabase
+          .from("follower")
+          .select("*", { count: "exact" })
+          .eq("user_id", user.id); // Abfrage für Following
+        if (error) {
+          console.error("Error loading following count:", error);
+        } else {
+          setFollowingCount(count || 0);
+        }
+      }
+    };
+
+    if (user) {
+      fetchProfile();
+      fetchPostCount();
+      fetchFollowerCount(); // Separate Abfrage für Follower
+      fetchFollowingCount(); // Separate Abfrage für Following
+    }
   }, [user]);
-
-
-
- console.log(user);
-  console.log(imageUrl);
 
   const handleLogout = async () => {
     try {
@@ -86,14 +116,8 @@ export default function ProfilePage() {
       navigate("/login");
       setUser(null);
     } catch (error) {
-      console.error("Fehler beim Logout:", error);
+      console.error("Error logging out", error);
     }
-  };
-
-  const handleFollowersClick = () => {
-    navigate(`/${user?.id}/profile/followers`, {
-      state: { followers: profile?.follower },
-    });
   };
 
   return (
@@ -103,7 +127,6 @@ export default function ProfilePage() {
           <NavLink to={"/home"}>
             <img src={logo} alt="toktok_logo" />
           </NavLink>
-
           <h2>{profile?.user_name}</h2>
         </div>
         <div className="profile-icons">
@@ -136,28 +159,16 @@ export default function ProfilePage() {
             </a>
           </div>
         </div>
-
         <div className="follower-container">
-          <div className="follower-container-info">
-            <p>0</p>
-            <p>Posts</p>
-          </div>
-
-          <span className="follower-container-span"></span>
-
-          <div
-            className="follower-container-info"
-            onClick={handleFollowersClick}
-          >
-            <p>{profile?.follower.length}</p>
-            <p>Followers</p>
-          </div>
-          <span className="follower-container-span"></span>
-          <div className="follower-container-info">
-            <p>{following ? following.length : 0}</p>
-
-            <p>Following</p>
-          </div>
+          {profile && (
+            <FollowerInfo
+              userId={user!.id}
+              postCount={postCount}
+              followerCount={followerCount}
+              followingCount={followingCount}
+              followers={profile?.follower}
+            />
+          )}
         </div>
       </div>
       <div className="user-posts">{/* <UserPosts/> */}</div>
