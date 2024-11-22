@@ -7,34 +7,16 @@ import { NavLink } from "react-router-dom";
 import arrowLeft from "/icons/arrow_left.svg";
 
 interface Profile {
-  id?: string;
   img_url: string | null | undefined;
-  name: string | null | undefined;
   user_name: string | null | undefined;
-  birthday: string | null | undefined;
-  occupation: string | null | undefined;
-  slogan: string | null | undefined;
-  created_at?: string;
-  phone: string | null | undefined;
-  gender: string | null | undefined;
-  website: string | null | undefined;
 }
 
 export default function NewPostPage() {
   const { user } = useUserContext();
 
   let profile: Profile | null = {
-    id: "",
     img_url: null,
-    name: null,
     user_name: null,
-    birthday: null,
-    occupation: null,
-    slogan: null,
-    phone: null,
-    gender: null,
-    website: null,
-    created_at: "",
   };
 
   const profileQuery = useQuery({
@@ -42,7 +24,7 @@ export default function NewPostPage() {
     queryFn: async () => {
       const result = await supabase
         .from("profiles")
-        .select("*")
+        .select("img_url, user_name")
         .eq("id", user?.id!)
         .single();
       if (result.error) {
@@ -62,13 +44,13 @@ export default function NewPostPage() {
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
 
-  const file = fileRef.current?.files?.[0] || null;
   const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const file = fileRef.current?.files?.[0] || null;
     if (!user) {
       return;
     }
 
-    e.preventDefault();
     if (file) {
       const uploadResult = await supabase.storage
         .from("post_img")
@@ -86,6 +68,7 @@ export default function NewPostPage() {
   const imageUrl = profileQuery.data?.img_url
     ? getStorageURL(profileQuery.data.img_url)
     : "";
+
   return (
     <div className="main-container">
       <div className="profile-header">
@@ -101,14 +84,14 @@ export default function NewPostPage() {
         <form onSubmit={handleUpload} className="newPostForm">
           <input type="file" name="" id="" ref={fileRef} />
           <div>
-            <img src={imageUrl!} alt={profile.name!} className="avatar" />
+            <img src={imageUrl!} alt={profile.user_name!} className="avatar" />
             <textarea
               className="text-f"
               placeholder="Write a caption..."
               ref={postTextRef}
               onInput={handleInput}
             ></textarea>
-            <img src={imageUrl!} alt={profile.name!} className="preview" />
+            <img src={imageUrl!} alt={profile.user_name!} className="preview" />
           </div>
           <button>Upload</button>
         </form>
