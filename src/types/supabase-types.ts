@@ -203,7 +203,6 @@ export type Database = {
           img_url: string | null
           name: string | null
           occupation: string | null
-          phone: string | null
           slogan: string | null
           user_name: string | null
           website: string | null
@@ -216,7 +215,6 @@ export type Database = {
           img_url?: string | null
           name?: string | null
           occupation?: string | null
-          phone?: string | null
           slogan?: string | null
           user_name?: string | null
           website?: string | null
@@ -229,7 +227,6 @@ export type Database = {
           img_url?: string | null
           name?: string | null
           occupation?: string | null
-          phone?: string | null
           slogan?: string | null
           user_name?: string | null
           website?: string | null

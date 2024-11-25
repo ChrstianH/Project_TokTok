@@ -3,12 +3,14 @@ import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
 import { NavLink, useNavigate } from "react-router-dom";
 
-import logo from "../../public/Logo.svg";
-import addIcon from "../../public/icons/plus_icon.svg";
-import editIcon from "../../public/icons/edit_icon.svg";
-import moreIcon from "../../public/icons/more_icon.svg";
+import logo from "/Logo.svg";
+import addIcon from "/icons/plus_icon.svg";
+import editIcon from "/icons/edit_icon.svg";
+import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
+import messageIcon from "/icons/send_icon.svg";
 import FollowerInfo from "../components/FollowerInfo";
+import ShowPosts from "../components/ShowPosts";
 
 interface Profile {
   id: string;
@@ -138,6 +140,9 @@ export default function ProfilePage() {
           </NavLink>
           <button onClick={handleLogout} className="logoutBtn">
             <img src={moreIcon} alt="settings" />
+            {/* <NavLink to="/:userID/inbox">
+              <img src={messageIcon} alt="inbox" />
+            </NavLink> */}
           </button>
         </div>
       </div>
@@ -171,7 +176,7 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
-      <div className="user-posts">{/* <UserPosts/> */}</div>
+      <div className="user-posts">{user && <ShowPosts userId={user.id} />}</div>
     </div>
   );
 }
