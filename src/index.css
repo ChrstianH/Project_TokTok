@@ -37,6 +37,10 @@ main {
   gap: 0.5rem;
 }
 /* LoadingScreen */
+
+.loader {
+  margin-top: 30vh;
+}
 /* NavBar */
 nav {
   width: 428px;

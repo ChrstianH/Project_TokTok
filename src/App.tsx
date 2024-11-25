@@ -1,6 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-// import { useEffect } from "react";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -13,28 +12,21 @@ import OtherProfilePage from "./pages/OtherProfilePage";
 import CommentsPage from "./pages/CommentsPage";
 import ShowFollowerPage from "./pages/ShowFollowerPage";
 import ProfilePage from "./pages/ProfilePage";
+import LoadingScreen from "./components/LoadingScreen";
 // import MessagesPage from "./pages/MessagesPage";
 // import InboxPage from "./pages/InboxPage";
 
 const client = new QueryClient();
 
 export default function App() {
-  // useEffect(() => {
-
-  //   const timer = setTimeout(() => {
-  //     window.location.href = '/login';
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
   return (
     <QueryClientProvider client={client}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<LoginPage />} />
-            {/* <Route path="/" element={<LoadingScreen />} /> */}
-            {/* <Route path="/login" element={<LoginPage/>}/> */}
+            <Route index element={<LoadingScreen />} />
+
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/home" element={<HomePage />} />
