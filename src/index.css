@@ -342,6 +342,25 @@ select {
   color: #424242;
 }
 
+/* ImageFilter  */
+.filter-options {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  margin-top: 10px;
+}
+
+.filter-option {
+  cursor: pointer;
+  text-align: center;
+}
+
+.filter-option.selected {
+  border: 2px solid #000;
+  padding: 2px;
+  border-radius: 8px;
+}
+
 /* CommentsPage */
 
 .comment-like-btn {
