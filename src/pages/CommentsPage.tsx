@@ -152,8 +152,37 @@ export default function CommentsPage() {
     }
   };
 
+  function getTimeSpan(now: number, commentDate: number): string {
+    if (!now || !commentDate) {
+      throw new Error("Function not implemented.");
+    }
+
+    const diff = (now - commentDate) / 1000;
+    if (diff < 60) {
+      return `${Math.floor(diff)} seconds ago`;
+    } else if (diff / 60 < 60) {
+      return `${Math.floor(diff / 60)} minutes ago`;
+    } else if (diff / 3600 < 24) {
+      return `${Math.floor(diff / 3600)} hours ago`;
+    } else if (diff / 86400 < 7) {
+      return `${Math.floor(diff / 86400)} days ago`;
+    } else if (diff / 86400 < 30) {
+      return `${Math.floor(diff / 86400 / 7)} weeks ago`;
+    } else if (diff / 86400 < 365) {
+      return `${Math.floor(diff / 86400 / 30)} months ago`;
+    } else {
+      return `${Math.floor(diff / 86400 / 365)} years ago`;
+    }
+  }
+
   return (
     <div className="main-container">
+      <div className="profile-header">
+        <div>
+          {/* <BackButton /> */}
+          <h2>{post?.profiles.user_name}'s post</h2>
+        </div>
+      </div>{" "}
       {post && (
         <div>
           <div className="post-header">
@@ -199,6 +228,7 @@ export default function CommentsPage() {
                 <b>{comment.profiles.user_name}</b>
               </div>
               <p>{comment.text}</p>
+              <p>{getTimeSpan(Date.now(), Date.parse(comment.created_at))}</p>
             </li>
           ))}
         </ul>
