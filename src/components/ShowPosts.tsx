@@ -63,7 +63,7 @@ const ShowPosts: React.FC<ShowPostsProps> = ({ userId }) => {
                 src={getStorageURL(post.img_url!) || ""}
                 className={`post-img ${post.img_url ? "post-img-profile" : ""}`}
               />
-            </Link>{" "}
+            </Link>
           </div>
         ))}
       </div>

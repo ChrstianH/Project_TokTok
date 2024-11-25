@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import { getStorageURL } from "../lib/supabase";
 import HashtagText from "../components/HashtagText";
 import { useUserContext } from "../context/userContext";
+import BackButton from "../components/BackButton";
 
 interface Comment {
   id: string;
@@ -36,6 +37,7 @@ export default function CommentsPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [post, setPost] = useState<PostWithProfile | null>(null);
   const { user } = useUserContext();
+
   useEffect(() => {
     const fetchPost = async () => {
       if (postId) {
@@ -99,30 +101,7 @@ export default function CommentsPage() {
     };
 
     fetchComments();
-
-    const commentsSubscription = supabase
-      .channel("public:comments")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "comments",
-          filter: `post_id=eq.${postId}`,
-        },
-        (payload) => {
-          setComments((prevComments) => [
-            payload.new as Comment,
-            ...prevComments,
-          ]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(commentsSubscription);
-    };
-  }, [postId]);
+  }, [postId, comments]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -154,6 +133,12 @@ export default function CommentsPage() {
 
   return (
     <div className="main-container">
+      <div className="profile-header">
+        <div>
+          <BackButton />
+          <h2>{post?.profiles.user_name}'s post</h2>
+        </div>
+      </div>
       {post && (
         <div>
           <div className="post-header">
@@ -177,13 +162,13 @@ export default function CommentsPage() {
         </div>
       )}
       <div>
-        <h2>Kommentare</h2>
+        <h2>Comments</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write comment..."
+            placeholder="Write a comment..."
           />
           <button type="submit">Post</button>
         </form>

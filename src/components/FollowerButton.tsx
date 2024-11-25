@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { supabase } from "../lib/supabase";
 
 interface FollowerButtonProps {
   currentUserId: string | null | undefined;
   followedId: string;
-  isFollowing: boolean | null;
-  onFollowChange: () => void;
+  isFollowing: boolean;
+  onFollowChange: (isFollowing: boolean) => void;
 }
 
 const FollowerButton: React.FC<FollowerButtonProps> = ({
@@ -13,38 +14,38 @@ const FollowerButton: React.FC<FollowerButtonProps> = ({
   isFollowing,
   onFollowChange,
 }) => {
-  const handleFollow = async () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleToggleFollow = async () => {
     if (!currentUserId) return;
+    setIsLoading(true);
 
-    const { error } = await supabase
-      .from("follower")
-      .insert([{ user_id: currentUserId, profile_id: followedId }]);
+    try {
+      if (isFollowing) {
+        await supabase
+          .from("follower")
+          .delete()
+          .eq("user_id", currentUserId)
+          .eq("profile_id", followedId);
+      } else {
+        await supabase.from("follower").insert({
+          user_id: currentUserId,
+          profile_id: followedId,
+        });
+      }
 
-    if (error) {
-      console.error("Error while following:", error);
-    } else {
-      setTimeout(onFollowChange, 500);
-    }
-  };
-
-  const handleUnfollow = async () => {
-    if (!currentUserId) return;
-
-    const { error } = await supabase
-      .from("follower")
-      .delete()
-      .match({ user_id: currentUserId, profile_id: followedId });
-
-    if (error) {
-      console.error("Error exiting the follow up:", error);
-    } else {
-      setTimeout(onFollowChange, 500);
+      onFollowChange(!isFollowing);
+    } catch (error) {
+      console.error("Error toggling follow:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <button
-      onClick={() => (isFollowing ? handleUnfollow() : handleFollow())}
+      onClick={handleToggleFollow}
+      disabled={isLoading}
       style={{
         padding: "8px 20px",
         borderRadius: "20px",
@@ -55,7 +56,7 @@ const FollowerButton: React.FC<FollowerButtonProps> = ({
         border: "none",
       }}
     >
-      {isFollowing ? "Following" : "Follow"}
+      {isLoading ? "Loading..." : isFollowing ? "Following" : "Follow"}
     </button>
   );
 };

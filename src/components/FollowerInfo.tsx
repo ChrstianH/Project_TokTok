@@ -1,27 +1,77 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 import { NavLink, useNavigate } from "react-router-dom";
 
 interface FollowerInfoProps {
   userId: string;
-  postCount: number;
-  followerCount: number;
-  followingCount: number;
-  followers: { user_id: string }[] | undefined;
 }
 
-const FollowerInfo: React.FC<FollowerInfoProps> = ({
-  postCount,
-  followerCount,
-  followingCount,
-  followers,
-}) => {
+const FollowerInfo: React.FC<FollowerInfoProps> = ({ userId }) => {
+  const [postCount, setPostCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followers, setFollowers] = useState<{ user_id: string }[]>();
   const navigate = useNavigate();
 
-  const handleFollowersClick = () => {
-    const pathParts = window.location.pathname.split("/");
-    const userId = pathParts[1];
+  useEffect(() => {
+    const fetchPostCount = async () => {
+      const { count, error } = await supabase
+        .from("posts")
+        .select("*", { count: "exact" })
+        .eq("user_id", userId);
+      if (error) {
+        console.error("Error loading post count:", error);
+      } else {
+        setPostCount(count || 0);
+      }
+    };
 
+    const fetchFollowerCount = async () => {
+      const { count, error } = await supabase
+        .from("follower")
+        .select("*", { count: "exact" })
+        .eq("profile_id", userId);
+      if (error) {
+        console.error("Error loading follower count:", error);
+      } else {
+        setFollowerCount(count || 0);
+      }
+    };
+
+    const fetchFollowingCount = async () => {
+      const { count, error } = await supabase
+        .from("follower")
+        .select("*", { count: "exact" })
+        .eq("user_id", userId);
+      if (error) {
+        console.error("Error loading following count:", error);
+      } else {
+        setFollowingCount(count || 0);
+      }
+    };
+
+    const fetchFollowers = async () => {
+      const { data, error } = await supabase
+        .from("follower")
+        .select("user_id")
+        .eq("profile_id", userId);
+      if (error) {
+        console.error("Error loading followers:", error);
+      } else {
+        setFollowers(data);
+      }
+    };
+
+    fetchPostCount();
+    fetchFollowerCount();
+    fetchFollowingCount();
+    fetchFollowers();
+  }, [userId]);
+
+  const handleFollowersClick = () => {
     navigate(`/${userId}/profile/follower`, { state: { followers } });
   };
+
   return (
     <div className="follower-container">
       <div className="follower-container-info">
