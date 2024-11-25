@@ -101,6 +101,8 @@ nav p {
 }
 .post-img {
   width: 350px;
+  height: 350px;
+  object-fit: cover;
   border-radius: 20px;
 }
 .post-text {
@@ -309,6 +311,7 @@ select {
 .avatar {
   height: 56px;
   width: 56px;
+  object-fit: cover;
 }
 .avatar {
   border-radius: 28px;
@@ -348,4 +351,19 @@ select {
   border: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+/* ShowProfiles */
+
+.show-post-container {
+  margin-top: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.post-img-profile {
+  width: 124px;
+  height: 124px;
+  object-fit: cover;
 }
