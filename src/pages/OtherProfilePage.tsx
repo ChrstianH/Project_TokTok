@@ -9,6 +9,7 @@ import editIcon from "/icons/edit_icon.svg";
 import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
 import { useQuery } from "@tanstack/react-query";
+import ShowPosts from "../components/ShowPosts";
 
 interface Profile {
   id: string;
@@ -126,17 +127,6 @@ export default function OtherProfilePage() {
 
           <h2>{profile?.user_name}</h2>
         </div>
-        <div className="profile-icons">
-          <NavLink to={`/${user?.id}/new-post`}>
-            <img src={addIcon} alt="add_post" />
-          </NavLink>
-          <NavLink to={`/${user?.id}/edit-profile`}>
-            <img src={editIcon} alt="edit_profile" />
-          </NavLink>
-          <button onClick={handleLogout} className="logoutBtn">
-            <img src={moreIcon} alt="settings" />
-          </button>
-        </div>
       </div>
       <div className="profile-container">
         <div>
@@ -170,7 +160,9 @@ export default function OtherProfilePage() {
         </div>
         <button className="follow-btn">Follow</button>
       </div>
-      <div className="user-posts">{/* <UserPosts/> */}</div>
+      <div className="user-posts">
+        {profileID && <ShowPosts userId={profileID} />}
+      </div>
     </div>
   );
 }
