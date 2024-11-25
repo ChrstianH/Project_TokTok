@@ -8,7 +8,6 @@ import addIcon from "/icons/plus_icon.svg";
 import editIcon from "/icons/edit_icon.svg";
 import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
-import messageIcon from "/icons/send_icon.svg";
 import FollowerInfo from "../components/FollowerInfo";
 import ShowPosts from "../components/ShowPosts";
 
@@ -23,16 +22,11 @@ interface Profile {
   created_at: string;
   gender: string | null;
   website: string | null;
-  follower: { user_id: string }[];
 }
 
 export default function ProfilePage() {
   const { user, setUser } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
-  const [postCount, setPostCount] = useState(0);
-  const [followerCount, setFollowerCount] = useState(0);
-  const [followingCount, setFollowingCount] = useState(0);
-  1;
 
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
   const navigate = useNavigate();
@@ -42,14 +36,7 @@ export default function ProfilePage() {
       if (user) {
         const { data, error } = await supabase
           .from("profiles")
-          .select(
-            `
-            *, 
-            follower!follower_profile_id_fkey(
-              user_id
-            )
-          `
-          )
+          .select("*")
           .eq("id", user.id)
           .single();
 
@@ -61,53 +48,8 @@ export default function ProfilePage() {
       }
     };
 
-    const fetchPostCount = async () => {
-      if (user) {
-        const { count, error } = await supabase
-          .from("posts")
-          .select("*", { count: "exact" })
-          .eq("user_id", user.id);
-        if (error) {
-          console.error("Error loading post count:", error);
-        } else {
-          setPostCount(count || 0);
-        }
-      }
-    };
-
-    const fetchFollowerCount = async () => {
-      if (user) {
-        const { count, error } = await supabase
-          .from("follower")
-          .select("*", { count: "exact" })
-          .eq("profile_id", user.id);
-        if (error) {
-          console.error("Error loading follower count:", error);
-        } else {
-          setFollowerCount(count || 0);
-        }
-      }
-    };
-
-    const fetchFollowingCount = async () => {
-      if (user) {
-        const { count, error } = await supabase
-          .from("follower")
-          .select("*", { count: "exact" })
-          .eq("user_id", user.id);
-        if (error) {
-          console.error("Error loading following count:", error);
-        } else {
-          setFollowingCount(count || 0);
-        }
-      }
-    };
-
     if (user) {
       fetchProfile();
-      fetchPostCount();
-      fetchFollowerCount();
-      fetchFollowingCount();
     }
   }, [user]);
 
@@ -165,15 +107,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="follower-container">
-          {profile && (
-            <FollowerInfo
-              userId={user!.id}
-              postCount={postCount}
-              followerCount={followerCount}
-              followingCount={followingCount}
-              followers={profile?.follower}
-            />
-          )}
+          {user && <FollowerInfo userId={user?.id} />}
         </div>
       </div>
       <div className="user-posts">{user && <ShowPosts userId={user.id} />}</div>

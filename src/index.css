@@ -367,3 +367,9 @@ select {
   height: 124px;
   object-fit: cover;
 }
+
+/* BackButton */
+
+.backBtn {
+  cursor: pointer;
+}

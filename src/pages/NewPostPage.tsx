@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 
 import arrowLeft from "/icons/arrow_left.svg";
+import BackButton from "../components/BackButton";
 
 interface Profile {
   img_url: string | null | undefined;
@@ -73,9 +74,7 @@ export default function NewPostPage() {
     <div className="main-container">
       <div className="profile-header">
         <div>
-          <NavLink to={"/home"}>
-            <img src={arrowLeft} alt="back home button" />
-          </NavLink>
+          <BackButton />
           <h2>New Post</h2>
         </div>
       </div>

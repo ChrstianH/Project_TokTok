@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import { useUserContext } from "../context/userContext";
 import { getStorageURL, supabase } from "../lib/supabase";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import arrowLeft from "/icons/arrow_left.svg";
 import editIcon from "/icons/editImg.svg";
 import placeholderImg from "/placeholder-profileImg.png";
+import BackButton from "../components/BackButton";
 
 export default function EditProfilePage() {
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -123,9 +123,7 @@ export default function EditProfilePage() {
     <div>
       <div className="profile-header">
         <div>
-          <NavLink to={"/home"}>
-            <img src={arrowLeft} alt="back home button" />
-          </NavLink>
+          <BackButton />
           <h2>Edit Profile</h2>
         </div>
       </div>

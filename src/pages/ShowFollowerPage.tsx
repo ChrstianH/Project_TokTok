@@ -21,6 +21,7 @@ export default function ShowFollowerPage() {
     UserProfileWithImage[]
   >([]);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +36,17 @@ export default function ShowFollowerPage() {
       if (userId) {
         fetchUsersIFollow(userId);
         fetchUsersFollowingMe(userId);
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("user_name")
+          .eq("id", userId)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user name:", profileError);
+        } else {
+          setUserName(profileData.user_name);
+        }
       }
     };
 
@@ -191,6 +203,20 @@ export default function ShowFollowerPage() {
     setUsersFollowingMe(usersWithImage);
   };
 
+  const handleFollowChange = (userId: string, isFollowing: boolean) => {
+    setUsersIFollow((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, isFollowing: isFollowing } : user
+      )
+    );
+
+    setUsersFollowingMe((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, isFollowing: isFollowing } : user
+      )
+    );
+  };
+
   return (
     <div className="main-container">
       <div className="profile-header">
@@ -252,7 +278,9 @@ export default function ShowFollowerPage() {
                 currentUserId={currentUserId}
                 followedId={user.id}
                 isFollowing={user.isFollowing === true}
-                onFollowChange={() => fetchUsersIFollow(userId!)}
+                onFollowChange={(isFollowing) =>
+                  handleFollowChange(user.id, isFollowing)
+                }
               />
             )}
           </div>
@@ -309,7 +337,9 @@ export default function ShowFollowerPage() {
                 currentUserId={currentUserId}
                 followedId={user.id}
                 isFollowing={user.isFollowing === true}
-                onFollowChange={() => fetchUsersFollowingMe(userId!)}
+                onFollowChange={(isFollowing) =>
+                  handleFollowChange(user.id, isFollowing)
+                }
               />
             )}
           </div>
