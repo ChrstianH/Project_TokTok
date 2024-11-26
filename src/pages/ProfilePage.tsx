@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import logo from "/Logo.svg";
 import addIcon from "/icons/plus_icon.svg";
