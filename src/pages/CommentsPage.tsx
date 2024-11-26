@@ -162,6 +162,9 @@ export default function CommentsPage() {
               className="post-img"
             />
             <HashtagText text={post.text} />
+            <p className="comment-time">
+              {formatDistanceToNow(new Date(post.created_at))} ago
+            </p>
           </div>
         </div>
       )}

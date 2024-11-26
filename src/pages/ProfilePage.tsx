@@ -6,7 +6,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import logo from "/Logo.svg";
 import addIcon from "/icons/plus_icon.svg";
 import editIcon from "/icons/edit_icon.svg";
-import moreIcon from "/icons/more_icon.svg";
 import placeholderImg from "/placeholder-profileImg.png";
 import FollowerInfo from "../components/FollowerInfo";
 import ShowPosts from "../components/ShowPosts";
@@ -53,17 +52,6 @@ export default function ProfilePage() {
     }
   }, [user]);
 
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      setProfile(undefined);
-      navigate("/login");
-      setUser(null);
-    } catch (error) {
-      console.error("Error logging out", error);
-    }
-  };
-
   return (
     <div className="main-container">
       <div className="profile-header">
@@ -80,12 +68,6 @@ export default function ProfilePage() {
           <NavLink to={`/${user?.id}/edit-profile`}>
             <img src={editIcon} alt="edit_profile" />
           </NavLink>
-          <button onClick={handleLogout} className="logoutBtn">
-            <img src={moreIcon} alt="settings" />
-            {/* <NavLink to="/:userID/inbox">
-              <img src={messageIcon} alt="inbox" />
-            </NavLink> */}
-          </button>
         </div>
       </div>
       <div className="profile-container">
