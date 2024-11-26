@@ -1,6 +1,6 @@
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import HashtagText from "../components/HashtagText";
 import PostInteraction from "../components/PostInteraction";
@@ -15,6 +15,7 @@ interface PostWithProfile {
   user_id: string;
   created_at: string;
   profiles: {
+    id: string;
     user_name: string;
     img_url: string | null;
     occupation: string | null;
@@ -22,6 +23,8 @@ interface PostWithProfile {
 }
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   const postsWithProfilesQuery = useQuery({
     queryKey: ["postsWithProfiles"],
     queryFn: async () => {
@@ -35,6 +38,7 @@ export default function HomePage() {
           user_id, 
           created_at,
           profiles (
+            id,
             user_name, 
             img_url,
             occupation
@@ -73,7 +77,12 @@ export default function HomePage() {
       </div>
       {postsWithProfiles.map((post: PostWithProfile) => (
         <div key={post.id}>
-          <div className="post-header">
+          <div
+            className="post-header"
+            onClick={() => {
+              navigate(`/other-profile/${post.profiles.id}`);
+            }}
+          >
             <img
               src={getStorageURL(post.profiles.img_url!) || ""}
               alt={post.profiles.user_name}

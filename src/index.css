@@ -224,6 +224,7 @@ nav p {
   display: flex;
   gap: 1rem;
   align-items: center;
+  cursor: pointer;
 }
 .post-container {
   display: flex;
@@ -234,7 +235,7 @@ nav p {
 .post-img {
   width: 380px;
   height: 380px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 14px;
 }
 .post-text {

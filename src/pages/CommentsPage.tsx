@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { getStorageURL } from "../lib/supabase";
@@ -27,6 +27,7 @@ interface PostWithProfile {
   user_id: string;
   created_at: string;
   profiles: {
+    id: string | null;
     user_name: string;
     img_url: string | null;
     occupation: string | null;
@@ -39,6 +40,7 @@ export default function CommentsPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [post, setPost] = useState<PostWithProfile | null>(null);
   const { user } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -53,6 +55,7 @@ export default function CommentsPage() {
             user_id, 
             created_at,
             profiles (
+              id,
               user_name, 
               img_url,
               occupation
@@ -86,6 +89,7 @@ export default function CommentsPage() {
             text,
             created_at,
             profiles (
+              id,
               user_name,
               img_url,
               occupation
@@ -106,6 +110,18 @@ export default function CommentsPage() {
     fetchComments();
   }, [postId]);
 
+  const [_userImgUrl, setUserImgUrl] = useState("");
+
+  useEffect(() => {
+    const fetchUserImgUrl = async () => {
+      if (user?.img_url) {
+        const url = await getStorageURL(user.img_url);
+        setUserImgUrl(url ?? "");
+      }
+    };
+    fetchUserImgUrl();
+  }, [user]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -115,16 +131,20 @@ export default function CommentsPage() {
 
     try {
       if (user) {
-        const { error } = await supabase.from("comments").insert({
-          post_id: postId ?? "",
-          text: newComment,
-          user_id: user.id,
-        });
+        const { data, error } = await supabase
+          .from("comments")
+          .insert({
+            post_id: postId ?? "",
+            text: newComment,
+            user_id: user.id,
+          })
+          .single();
 
         if (error) {
           console.error("Error adding comment:", error);
         } else {
           setNewComment("");
+          setComments([data as Comment, ...comments]);
         }
       } else {
         console.error("No user logged in");
@@ -145,7 +165,12 @@ export default function CommentsPage() {
 
       {post && (
         <div>
-          <div className="post-header">
+          <div
+            className="post-header"
+            onClick={() => {
+              navigate(`/other-profile/${post?.profiles.id}`);
+            }}
+          >
             <img
               src={getStorageURL(post.profiles.img_url!) || ""}
               alt={post.profiles.user_name}
@@ -177,6 +202,7 @@ export default function CommentsPage() {
             alt="user image"
           />
           <input
+            required
             type="text"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
