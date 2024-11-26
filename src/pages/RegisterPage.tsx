@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useUserContext } from "../context/userContext";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
+import messageSvg from "../assets/message.svg";
+import lockSvg from "../assets/lock.svg";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -32,27 +34,38 @@ export default function RegisterPage() {
   return (
     <div className="main-container">
       <div>
-        <h1>Create your Account</h1>
-        <img src={logo} alt="" />
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button>Sign up</button>
+        <h1 className="auth-heading">Create your Account</h1>
+        <img className="auth-logo" src={logo} alt="toktok-logo" />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-input-area">
+            <img src={messageSvg} alt="email-icon" />
+            <input
+              className="auth-input"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="auth-input-area">
+            <img src={lockSvg} alt="password-icon" />
+            <input
+              className="auth-input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button className="auth-button">Sign up</button>
         </form>
-        <p>
-          Already have an account? <Link to="/login">Sign in</Link>
+        <p className="login-link-text">
+          Already have an account?{" "}
+          <Link className="auth-other-page-link" to="/login">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>
