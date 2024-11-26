@@ -21,7 +21,7 @@ export default function ShowFollowerPage() {
     UserProfileWithImage[]
   >([]);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [_userName, setUserName] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {

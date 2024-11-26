@@ -394,6 +394,7 @@ nav p {
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
+  cursor: pointer;
 }
 .follower-container-span {
   background-color: #424242;
@@ -448,17 +449,13 @@ nav p {
   align-items: center;
   justify-content: center;
 }
-/* .details-container {
-  display: flex;
-  flex-direction: column;
-} */
 
 .edit-form {
   margin-top: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 .edit-form input,
 .edit-form select {

@@ -24,11 +24,10 @@ interface Profile {
 }
 
 export default function ProfilePage() {
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const [profile, setProfile] = useState<Profile>();
 
   const imageUrl = profile?.img_url ? getStorageURL(profile.img_url) : null;
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
