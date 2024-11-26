@@ -1,10 +1,7 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function LoadingScreen() {
-  const navigate = useNavigate();
-
   useEffect(() => {
     const timer = setTimeout(() => {
       window.location.href = "/login";

@@ -5,7 +5,6 @@ import { NavLink, useParams } from "react-router-dom";
 
 import logo from "/Logo.svg";
 import placeholderImg from "/placeholder-profileImg.png";
-import { useQuery } from "@tanstack/react-query";
 import ShowPosts from "../components/ShowPosts";
 import FollowerButton from "../components/FollowerButton";
 import FollowerInfo from "../components/FollowerInfo";

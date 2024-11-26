@@ -120,7 +120,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div>
+    <div className="main-container">
       <div className="profile-header">
         <div>
           <BackButton />
@@ -172,7 +172,7 @@ export default function EditProfilePage() {
               ref={nameInputRef}
               type="text"
               name="name"
-              placeholder="your name"
+              placeholder="Your name"
               defaultValue={profileData.name || ""}
               disabled={!!profileData.name}
             />
@@ -180,7 +180,7 @@ export default function EditProfilePage() {
               ref={userNameInputRef}
               type="text"
               name="userName"
-              placeholder="your user name"
+              placeholder="Your user name"
               defaultValue={profileData.user_name || ""}
               disabled={!!profileData.user_name}
             />
@@ -188,20 +188,20 @@ export default function EditProfilePage() {
               ref={occupationInputRef}
               type="text"
               name="occupation"
-              placeholder="your jobtitle"
+              placeholder="Your jobtitle"
             />
             <input
               ref={bioInputRef}
               type="text"
               name="bio"
-              placeholder="tell us sth about yourself"
+              placeholder="Tell us sth about yourself"
             />
             <input
               ref={birthdayInputRef}
               type="date"
               name="birthday"
               id="birthday"
-              placeholder="your birthdate"
+              placeholder="Your birthdate"
               defaultValue={profileData.birthday || ""}
               disabled={!!profileData.birthday}
             />
@@ -220,9 +220,9 @@ export default function EditProfilePage() {
               ref={websiteInputRef}
               type="text"
               name="website"
-              placeholder="your website"
+              placeholder="Your website"
             />
-            <button>Update</button>
+            <button className="uploadBtn">Update</button>
           </form>
         )}
       </div>

@@ -13,8 +13,6 @@ import CommentsPage from "./pages/CommentsPage";
 import ShowFollowerPage from "./pages/ShowFollowerPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoadingScreen from "./components/LoadingScreen";
-// import MessagesPage from "./pages/MessagesPage";
-// import InboxPage from "./pages/InboxPage";
 
 const client = new QueryClient();
 
@@ -31,7 +29,6 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/home" element={<HomePage />} />
               <Route path="/:userID/profile" element={<ProfilePage />} />
-              {/* <Route path="/:userID/inbox" element={<InboxPage />} /> */}
               <Route
                 path="/:userID/edit-profile"
                 element={<EditProfilePage />}
@@ -45,14 +42,9 @@ export default function App() {
                 path="/other-profile/:profileID"
                 element={<OtherProfilePage />}
               />
-              {/* <Route
-                path="/other-profile/:profileID/messages"
-                element={<MessagesPage />}
-              /> */}
               <Route path="/search" element={<SearchPage />} />
               <Route path="/comments/:postId" element={<CommentsPage />} />
             </Route>
-
             <Route path="*" element={<Navigate to="/home" />} />
           </Route>
         </Routes>

@@ -2,9 +2,8 @@ import { useState, useRef } from "react";
 import { useUserContext } from "../context/userContext";
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import arrowLeft from "/icons/arrow_left.svg";
 import BackButton from "../components/BackButton";
 
 interface Profile {
@@ -102,7 +101,6 @@ export default function NewPostPage() {
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    // const file = fileRef.current?.files?.[0] || null;
     if (!user) {
       return;
     }
@@ -127,7 +125,7 @@ export default function NewPostPage() {
       user_id: user.id,
     });
     if (error) {
-      throw error; // Hata varsa yakala
+      throw error;
     }
 
     console.log("Post successfully inserted:", data);
@@ -147,15 +145,30 @@ export default function NewPostPage() {
         </div>
       </div>
       <div className="new-post">
-        <img src="" alt="Upload" className="uploadArea" />
-        <form onSubmit={handleUpload} className="newPostForm">
+        <div
+          className={`preview-container ${
+            !previewUrl ? "gray-background" : ""
+          }`}
+          onClick={() => fileRef.current?.click()}
+        >
+          <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+          {!previewUrl && <p className="select-image-text">Select image</p>}
+          {previewUrl && (
+            <img
+              src={previewUrl}
+              alt={profile.user_name!}
+              className="preview-img"
+            />
+          )}
           <input
             type="file"
-            name=""
-            id=""
-            onChange={handleFileChange}
+            name="post-image"
             ref={fileRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
           />
+        </div>
+        <form onSubmit={handleUpload} className="newPostForm">
           {originalUrl && (
             <div className="filter-options">
               {filters.map((filter, index) => (
@@ -167,15 +180,14 @@ export default function NewPostPage() {
                   onClick={() => handleFilterSelect(filter.value)}
                 >
                   <img
+                    className="show-filter"
                     src={originalUrl}
                     alt={filter.name}
                     style={{
                       filter: filter.value,
-                      width: "50px",
-                      height: "50px",
                     }}
                   />
-                  <p>{filter.name}</p>
+                  <p className="filter-text">{filter.name}</p>
                 </div>
               ))}
             </div>
@@ -188,30 +200,9 @@ export default function NewPostPage() {
               ref={postTextRef}
               onInput={handleInput}
             ></textarea>
-            <div>
-              <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-              <img
-                src={previewUrl ?? imageUrl!}
-                alt={profile.user_name!}
-                className="preview"
-              />
-            </div>
           </div>
-          <button>Upload</button>
+          <button className="uploadBtn">Upload</button>
         </form>
-        <p className="location newPostForm">Add Location</p>
-        <div className="also-post newPostForm">
-          <p>Also post to</p>
-          <div>
-            <p>Facebook</p>
-          </div>
-          <div>
-            <p>X (Twitter)</p>
-          </div>
-          <div>
-            <p>Tumblr</p>
-          </div>
-        </div>
       </div>
     </div>
   );

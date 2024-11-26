@@ -66,6 +66,11 @@ nav {
 }
 
 /* NavBar */
+
+/* .logout-svg {
+  width: 30px;
+  height: 30px;
+} */
 nav a {
   text-decoration: none;
 }
@@ -84,6 +89,7 @@ nav p {
   stroke: #ff4d67;
   color: #ff4d67;
 } 
+
 
 /* FollowerButton */
 
@@ -229,7 +235,7 @@ nav p {
   width: 380px;
   height: 380px;
   object-fit: cover;
-  border-radius: 2rem;
+  border-radius: 14px;
 }
 .post-text {
   width: 380px;
@@ -321,7 +327,6 @@ nav p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.2rem;
 }
 
 .profile-header img {
@@ -336,8 +341,8 @@ nav p {
 
 .profile-header div:first-of-type img {
   padding-right: 15px;
-  height: 32px;
-  width: 32px;
+  height: 40px;
+  width: 40px;
 }
 
 .profile-header div:first-of-type h2 {
@@ -345,10 +350,9 @@ nav p {
 }
 
 .profile-icons {
-  width: 150px;
+  width: 70px;
   display: flex;
   justify-content: space-between;
-  padding-right: 1.2rem;
 }
 
 .profile-icons a img {
@@ -422,22 +426,6 @@ nav p {
 
 /* EditProfilePage  */
 
-.back-home-btn,
-.logoutBtn {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.edit-form {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 1.5rem;
-}
-
 .profile-picture-container {
   position: relative;
   display: inline-block;
@@ -460,7 +448,29 @@ nav p {
   align-items: center;
   justify-content: center;
 }
+/* .details-container {
+  display: flex;
+  flex-direction: column;
+} */
 
+.edit-form {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+.edit-form input,
+.edit-form select {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  background-color: #eee;
+  padding-left: 20px;
+  font-family: Urbanist;
+  color: black;
+}
 .upload-button {
   position: absolute;
   bottom: 1px;
@@ -471,12 +481,6 @@ nav p {
   cursor: pointer;
 }
 
-input,
-select {
-  width: 90%;
-  height: 2rem;
-}
-
 /* NewPostPage */
 
 .new-post {
@@ -485,7 +489,32 @@ select {
   gap: 24px;
   padding: 24px;
 }
-
+.preview-container {
+  margin: 0 auto;
+  width: 350px;
+  height: 350px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.preview-container:hover {
+  background-color: #f0f0f0;
+}
+.select-image-text {
+  color: #ff4d67;
+  font-size: 24px;
+}
+.preview-img {
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.gray-background {
+  background-color: #9e9e9e;
+}
 .newPostForm {
   display: flex;
   flex-direction: column;
@@ -496,7 +525,7 @@ select {
   display: flex;
   gap: 16px;
 }
-.newPostForm > button {
+.uploadBtn {
   width: fit-content;
   font-size: 18px;
   line-height: 1.4;
@@ -504,23 +533,26 @@ select {
   align-self: center;
   text-align: center;
   color: white;
-  background-color: #ff4d67;
+  background-color: #e98090;
   padding: 10px 24px;
   width: 270px;
   border-radius: 100px;
+  border: none;
+  cursor: pointer;
 }
-
-.preview,
-.avatar {
-  height: 46px;
-  width: 48px;
+.uploadBtn:hover {
+  background-color: #ff4d67;
+}
+.show-filter {
+  width: 50px;
+  height: 50px;
   object-fit: cover;
 }
 .avatar {
+  height: 48px;
+  width: 48px;
   border-radius: 28px;
-}
-.preview {
-  border-radius: 8px;
+  object-fit: cover;
 }
 
 .text-f {
@@ -533,19 +565,9 @@ select {
   font-size: 14px;
   line-height: 1.4;
   letter-spacing: 0.2px;
-  width: 100%;
+  width: 90%;
   resize: none;
   height: 40px;
-}
-
-.also-post,
-.location {
-  padding: 16px 0;
-  font-size: 18px;
-  line-height: 1.4;
-  letter-spacing: 0.2px;
-  font-weight: 600;
-  color: #424242;
 }
 
 /* ImageFilter  */
@@ -553,7 +575,7 @@ select {
   display: flex;
   flex-direction: row;
   gap: 1px;
-  margin-top: 10px;
+  margin-top: 2rem;
 }
 
 .filter-option {
@@ -562,9 +584,14 @@ select {
 }
 
 .filter-option.selected {
-  border: 2px solid #000;
+  border: 2px solid #ff4d67;
   padding: 2px;
   border-radius: 8px;
+}
+
+.filter-text {
+  font-size: 14px;
+  color: #616161;
 }
 
 /* CommentsPage */
