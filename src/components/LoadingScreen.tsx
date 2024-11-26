@@ -16,7 +16,7 @@ export default function LoadingScreen() {
   return (
     <div className="main-container">
       <DotLottieReact
-        src="https://lottie.host/44d9e07a-b0da-48c7-9b42-2b567f8c338f/yBIxY98sk4.lottie"
+        src="https://lottie.host/a36708f6-6020-4ecf-9816-2d61b0e25edf/rhpivcOlGK.lottie"
         loop
         autoplay
         className="loader"

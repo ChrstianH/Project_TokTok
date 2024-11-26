@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useUserContext } from "../context/userContext";
+import { useQuery } from "@tanstack/react-query";
 import CommentCount from "./CommentCount";
+
 import heart from "/icons/heart_icon.svg";
 import comment from "/icons/comment_icon.svg";
-import { useQuery } from "@tanstack/react-query";
 
 interface Props {
   postId: string;

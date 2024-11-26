@@ -44,17 +44,9 @@ const FollowerButton: React.FC<FollowerButtonProps> = ({
 
   return (
     <button
+      className={`follower-btn ${isFollowing ? "following" : ""}`}
       onClick={handleToggleFollow}
       disabled={isLoading}
-      style={{
-        padding: "8px 20px",
-        borderRadius: "20px",
-        fontSize: "14px",
-        backgroundColor: isFollowing ? "#ccc" : "#FF4D67",
-        color: isFollowing ? "#000" : "#fff",
-        transition: "all 0.3s",
-        border: "none",
-      }}
     >
       {isLoading ? "Loading..." : isFollowing ? "Following" : "Follow"}
     </button>

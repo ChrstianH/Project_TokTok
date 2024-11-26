@@ -1,9 +1,5 @@
 import { getStorageURL, supabase } from "../lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-
-import HashtagText from "../components/HashtagText";
-import PostInteraction from "../components/PostInteraction";
-import { hr } from "date-fns/locale";
 import { Link } from "react-router-dom";
 
 interface Post {
