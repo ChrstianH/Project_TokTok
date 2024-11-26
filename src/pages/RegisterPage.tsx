@@ -1,11 +1,13 @@
 import { useState } from "react";
-import logo from "../assets/Logo.svg";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../context/userContext";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
-import messageSvg from "../assets/message.svg";
-import lockSvg from "../assets/lock.svg";
+
+import logo from "/Logo.svg";
+import emailIcon from "/icons/email_icon.svg";
+import lockIcon from "/icons/lock_icon.svg";
+import hiddenIcon from "/icons/hidden_icon.svg";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -34,14 +36,18 @@ export default function RegisterPage() {
   return (
     <div className="main-container">
       <div>
-        <h1 className="auth-heading">Create your Account</h1>
+        <h1 className="auth-heading">
+          Create your <br />
+          Account
+        </h1>
         <img className="auth-logo" src={logo} alt="toktok-logo" />
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-input-area">
-            <img src={messageSvg} alt="email-icon" />
+            <img src={emailIcon} alt="email-icon" />
             <input
               className="auth-input"
               type="email"
+              alt="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -49,7 +55,7 @@ export default function RegisterPage() {
             />
           </div>
           <div className="auth-input-area">
-            <img src={lockSvg} alt="password-icon" />
+            <img src={lockIcon} alt="password-icon" />
             <input
               className="auth-input"
               type="password"
@@ -58,6 +64,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <img src={hiddenIcon} alt="hidden password" />
           </div>
           <button className="auth-button">Sign up</button>
         </form>

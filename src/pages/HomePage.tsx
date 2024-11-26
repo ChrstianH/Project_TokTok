@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { NavLink } from "react-router-dom";
 
 import HashtagText from "../components/HashtagText";
-import PostInteraction from "../components/PostInteraction"; // Importierte Komponente
+import PostInteraction from "../components/PostInteraction";
 
 import logo from "/Logo.svg";
+import { formatDistanceToNow } from "date-fns";
 
 interface PostWithProfile {
   id: string;
@@ -24,7 +25,10 @@ export default function HomePage() {
   const postsWithProfilesQuery = useQuery({
     queryKey: ["postsWithProfiles"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("posts").select(`
+      const { data, error } = await supabase
+        .from("posts")
+        .select(
+          `
           id, 
           img_url, 
           text, 
@@ -35,7 +39,9 @@ export default function HomePage() {
             img_url,
             occupation
           )
-        `);
+        `
+        )
+        .order("created_at", { ascending: false });
       if (error) {
         throw error;
       }
@@ -74,8 +80,8 @@ export default function HomePage() {
               className="avatar"
             />
             <div>
-              <b>{post.profiles.user_name}</b>
-              <p>{post.profiles.occupation}</p>
+              <h6 className="user-name">{post.profiles.user_name}</h6>
+              <p className="user-occ">{post.profiles.occupation}</p>
             </div>
           </div>
           <div className="post-container">
@@ -84,8 +90,12 @@ export default function HomePage() {
               className="post-img"
             />
             <HashtagText text={post.text} />
-
+            <p className="comment-time">
+              {formatDistanceToNow(new Date(post.created_at))} ago
+            </p>
             <PostInteraction postId={post.id} />
+
+            <hr />
           </div>
         </div>
       ))}

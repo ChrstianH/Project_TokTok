@@ -16,6 +16,7 @@ interface Comment {
   profiles: {
     user_name: string;
     img_url: string | null;
+    occupation: string | null;
   };
 }
 
@@ -86,7 +87,8 @@ export default function CommentsPage() {
             created_at,
             profiles (
               user_name,
-              img_url
+              img_url,
+              occupation
             )
           `
           )
@@ -150,8 +152,8 @@ export default function CommentsPage() {
               className="avatar"
             />
             <div>
-              <b>{post.profiles.user_name}</b>
-              <p>{post.profiles.occupation}</p>
+              <h6 className="user-name">{post.profiles.user_name}</h6>
+              <p className="user-occ">{post.profiles.occupation}</p>
             </div>
           </div>
           <div className="post-container">
@@ -164,29 +166,39 @@ export default function CommentsPage() {
         </div>
       )}
       <div>
-        <h2>Comments</h2>
-        <form onSubmit={handleSubmit}>
+        <hr />
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <img
+            className="avatar"
+            src={user ? getStorageURL(user.img_url!) || "" : ""}
+            alt="user image"
+          />
           <input
             type="text"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write a comment..."
+            placeholder="Your comment..."
           />
           <button type="submit">Post</button>
         </form>
-        <ul>
+        <ul className="comment-list">
           {comments.map((comment) => (
             <li key={comment.id}>
-              <div className="comment-header">
+              <div className="post-header">
                 <img
                   src={getStorageURL(comment.profiles.img_url!) || ""}
                   alt={comment.profiles.user_name}
                   className="avatar"
                 />
-                <b>{comment.profiles.user_name}</b>
+                <div>
+                  <h6 className="user-name">{comment.profiles.user_name}</h6>
+                  <p className="user-occ">{comment.profiles.occupation}</p>
+                </div>
               </div>
-              <p>{comment.text}</p>
-              <p>{formatDistanceToNow(new Date(comment.created_at))}</p>
+              <p className="comment-text">{comment.text}</p>
+              <p className="comment-time">
+                {formatDistanceToNow(new Date(comment.created_at))} ago
+              </p>
             </li>
           ))}
         </ul>

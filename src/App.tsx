@@ -53,7 +53,7 @@ export default function App() {
               <Route path="/comments/:postId" element={<CommentsPage />} />
             </Route>
 
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/home" />} />
           </Route>
         </Routes>
       </BrowserRouter>
