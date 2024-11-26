@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useUserContext } from "../context/userContext";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
+import messageSvg from "../assets/message.svg";
+import lockSvg from "../assets/lock.svg";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -35,28 +37,43 @@ export default function LoginPage() {
   return (
     <div className="main-container">
       <div>
-        <h1>Login to your Account</h1>
-        <img src={logo} alt="toktok-logo" />
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button>Sign In</button>
-          <a href="#">Forgot the password?</a>
+        <h1 className="auth-heading">
+          Login to your <br /> Account
+        </h1>
+        <img className="auth-logo" src={logo} alt="toktok-logo" />
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="auth-input-area">
+            <img src={messageSvg} alt="email-icon" />
+            <input
+              className="auth-input"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="auth-input-area">
+            <img src={lockSvg} alt="password-icon" />
+            <input
+              className="auth-input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button className="auth-button">Sign In</button>
+          <a className="auth-forgot-link" href="#">
+            Forgot the password?
+          </a>
         </form>
-        <p>
-          Don’t have an account? <Link to="/signup">Sign up</Link>
+        <p className="auth-other-page-link-text">
+          Don’t have an account?{" "}
+          <Link className="auth-other-page-link" to="/signup">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
