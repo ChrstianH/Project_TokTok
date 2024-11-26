@@ -166,6 +166,7 @@ export default function NewPostPage() {
             ref={fileRef}
             onChange={handleFileChange}
             style={{ display: "none" }}
+            required
           />
         </div>
         <form onSubmit={handleUpload} className="newPostForm">
@@ -195,6 +196,7 @@ export default function NewPostPage() {
           <div>
             <img src={imageUrl!} alt={profile.user_name!} className="avatar" />
             <textarea
+              required
               className="text-f"
               placeholder="Write a caption..."
               ref={postTextRef}
