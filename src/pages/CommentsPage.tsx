@@ -110,18 +110,6 @@ export default function CommentsPage() {
     fetchComments();
   }, [postId]);
 
-  const [_userImgUrl, setUserImgUrl] = useState("");
-
-  useEffect(() => {
-    const fetchUserImgUrl = async () => {
-      if (user?.img_url) {
-        const url = await getStorageURL(user.img_url);
-        setUserImgUrl(url ?? "");
-      }
-    };
-    fetchUserImgUrl();
-  }, [user]);
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -134,17 +122,30 @@ export default function CommentsPage() {
         const { data, error } = await supabase
           .from("comments")
           .insert({
-            post_id: postId ?? "",
+            post_id: postId!,
             text: newComment,
             user_id: user.id,
           })
+          .select(
+            `
+            *,
+            profiles (
+              id,
+              user_name,
+              img_url,
+              occupation
+            )
+          `
+          )
           .single();
 
         if (error) {
           console.error("Error adding comment:", error);
-        } else {
+        } else if (data) {
           setNewComment("");
           setComments([data as Comment, ...comments]);
+        } else {
+          console.error("Error adding comment: No data returned");
         }
       } else {
         console.error("No user logged in");
