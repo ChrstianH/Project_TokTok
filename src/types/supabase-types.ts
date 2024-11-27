@@ -166,21 +166,21 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          img_url: string | null
+          img_url: string
           text: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          img_url?: string | null
+          img_url: string
           text: string
           user_id?: string
         }
         Update: {
           created_at?: string
           id?: string
-          img_url?: string | null
+          img_url?: string
           text?: string
           user_id?: string
         }
