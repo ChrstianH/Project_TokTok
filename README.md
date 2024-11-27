@@ -15,7 +15,7 @@ We are particularly proud of the fact that we have created a mobile-first applic
 ## Vision
 
 Although TokTok is already a fully functional social media platform, we would have liked to implement a few more ideas. <br>
-Potential enhancements could be:
+Potential enhancements would be:
 
 - **Replying to comments:** Allows users to reply directly to comments and thus structure discussions.
 - **Messaging feature:** Allows users to send private messages to other users.
@@ -30,7 +30,7 @@ Potential enhancements could be:
 
 **Network:** Follow other users to see their posts in your feed and see who you follow and who follows you.
 
-**Mobile-First:** TokTok is optimized for use on mobile devices and offers a seamless experience on smartphones and tablets.
+**Mobile-First:** TokTok is optimized for use on mobile devices and offers a seamless experience on smartphones.
 
 ## Technologies
 
