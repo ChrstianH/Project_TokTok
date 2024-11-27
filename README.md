@@ -1,4 +1,6 @@
+<p align="center">
 <img src="images_readme/Logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 140;">
+</p>
 
 # TokTok
 
