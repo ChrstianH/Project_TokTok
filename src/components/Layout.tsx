@@ -29,9 +29,9 @@ export default function Layout() {
   return (
     <div className="mobile-container">
       <main>
-        <header>
+        {/* <header>
           <img src={topbar} alt="topbar" />
-        </header>
+        </header> */}
         <Outlet />
         {showFooter && (
           <footer>
