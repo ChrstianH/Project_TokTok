@@ -29,7 +29,7 @@ main {
   height: 100%;
   width: 428px;
   position: relative;
-  margin-top: 2%;
+  /* margin-top: 2%; */
   padding-bottom: 60px;
 }
 .main-container {
@@ -47,8 +47,16 @@ main {
 
 /* LoadingScreen */
 
+.background {
+  background-image: url("/background.svg");
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 20%;
+  opacity: 0.3;
+}
+
 .loader {
-  margin-top: 30vh;
+  margin-top: 50vh;
 }
 /* NavBar */
 nav {
