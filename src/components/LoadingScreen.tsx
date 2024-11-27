@@ -11,7 +11,7 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="main-container">
+    <div className="main-container background">
       <DotLottieReact
         src="https://lottie.host/a36708f6-6020-4ecf-9816-2d61b0e25edf/rhpivcOlGK.lottie"
         loop
