@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
-import topbar from "/topbar.png";
+// import topbar from "/topbar.png";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
 
