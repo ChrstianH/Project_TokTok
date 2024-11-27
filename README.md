@@ -12,14 +12,6 @@ With a lot of joy and commitment, we realized the technical implementation of To
 
 We are particularly proud of the fact that we have created a mobile-first application that is specifically tailored to the needs of young professionals and successfully implements a given design.
 
-## Vision
-
-Although TokTok is already a fully functional social media platform, we would have liked to implement a few more ideas. <br>
-Potential enhancements would be:
-
-- **Replying to comments:** Allows users to reply directly to comments and thus structure discussions.
-- **Messaging feature:** Allows users to send private messages to other users.
-
 ## Features
 
 **Profile management:** Create and edit your profile with information about yourself and your professional interests.
@@ -31,6 +23,14 @@ Potential enhancements would be:
 **Network:** Follow other users to see their posts in your feed and see who you follow and who follows you.
 
 **Mobile-First:** TokTok is optimized for use on mobile devices and offers a seamless experience on smartphones.
+
+## Vision
+
+Although TokTok is already a fully functional social media platform, we would have liked to implement a few more ideas. <br>
+Potential enhancements would be:
+
+- **Replying to comments:** Allows users to reply directly to comments and thus structure discussions.
+- **Messaging feature:** Allows users to send private messages to other users.
 
 ## Technologies
 
