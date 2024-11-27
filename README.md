@@ -1,5 +1,9 @@
 <img src="images_readme/Logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 200;">
 
+<center>
+  <img src="images_readme/Logo.png"> 
+</center>
+
 # TokTok
 
 TokTok is a social media platform developed specifically for young professionals. It enables users to network, share content and be inspired.
