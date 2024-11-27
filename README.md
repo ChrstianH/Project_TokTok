@@ -96,20 +96,22 @@ password: testuser
 
 To run TokTok on your local computer, follow these steps:
 
-1. **Clone this repository:**
+1. **Get in touch with us to get the Supabase Url and Key**
+
+2. **Clone this repository:**
 
    ```bash
    git clone https://github.com/ChrstianH/Project_TokTok.git
    ```
 
-2. **Install dependencies:**
+3. **Install dependencies:**
    Install the frontend dependencies by running:
 
    ```bash
    npm install
    ```
 
-3. **Start the app:**
+4. **Start the app:**
    Run the following command to start the application:
    ```bash
    npm run dev
