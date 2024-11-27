@@ -68,6 +68,7 @@ You can either create your own account, or login with our Testuser Joey Doe.
 
 email: testuser@example.com
 <br>
+password: testuser
 
 ## Usage
 
