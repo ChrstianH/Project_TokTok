@@ -6,6 +6,8 @@
 
 TokTok is a social media platform developed specifically for young professionals. It enables users to network, share content and be inspired.
 
+![TokTok Presentation Startpage](<Bildschirmfoto 2024-11-27 um 15.09.04.png>)
+
 ## About this project
 
 TokTok is the final project of our 6-month web developer bootcamp. In this project we were able to use our newly acquired skills in React, TypeScript and Supabase to develop a fully functional social media platform.
@@ -75,6 +77,9 @@ You can either create your own account, or login with our Testuser Joey Doe.
 email: testuser@example.com
 <br>
 password: testuser
+
+**To display on mobile screen we used this Chrome Extension:**
+[MobilerSimulator](https://chromewebstore.google.com/detail/mobiler-simulator-%E2%80%93-reakt/ckejmhbmlajgoklhgbapkiccekfoccmk)
 
 ## Usage
 
